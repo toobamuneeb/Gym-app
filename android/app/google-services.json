@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "396101657890",
+    "project_id": "josephgym-8c8bd",
+    "storage_bucket": "josephgym-8c8bd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396101657890:android:0bd5ccaa6950d2ea0af17b",
+        "android_client_info": {
+          "package_name": "com.josephgym"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4u5OqsCmgD9ph8yVWZp25kHQcDpkLrLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
