@@ -1,15 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from '../screens';
 import BottomStak from './BottomStak';
-import {ScreenNames} from './ScreenName';
+import { ScreenNames } from './ScreenName';
 import AuthStack from './AuthStack';
 
 const Stack = createStackNavigator();
 const ScreenStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={ScreenNames.BOTTOM_STACK} component={BottomStak} />
       <Stack.Screen name={ScreenNames.ABOUT} component={Screens.About} />
       <Stack.Screen name={ScreenNames.MESSAGE} component={Screens.Message} />
@@ -68,6 +68,10 @@ const ScreenStack = () => {
       <Stack.Screen
         name={ScreenNames.CLIENTS_PROFILE}
         component={Screens.ClientProfile}
+      />
+      <Stack.Screen
+        name={ScreenNames.ADD_NEW_TRACKER}
+        component={Screens.AddNewTracker}
       />
       <Stack.Screen name={ScreenNames.DIET_PALN} component={Screens.DietPlan} />
     </Stack.Navigator>

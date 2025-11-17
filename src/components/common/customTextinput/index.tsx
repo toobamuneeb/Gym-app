@@ -1,15 +1,15 @@
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useState} from 'react';
-import {TextNormal, TextSmall} from '../customText';
-import {Font} from '../../../utils/ImagePath';
-import {COLORS} from '../../../utils/theme';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import { TextNormal, TextSmall } from '../customText';
+import { Font } from '../../../utils/ImagePath';
+import { COLORS } from '../../../utils/theme';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {CustomIcon} from '../customIcons';
-import {CustomTextinputProp} from './interface';
+import { CustomIcon } from '../customIcons';
+import { CustomTextinputProp } from './interface';
 
 const CustomTextinput: React.FC<CustomTextinputProp> = ({
   secureTextEntry,
@@ -31,14 +31,15 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
 }) => {
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <View style={{marginBottom: hp(2), ...mainContainer}}>
+    <View style={{ marginBottom: hp(2), ...mainContainer }}>
       {title && (
         <TextNormal
           textStyle={{
             fontFamily: Font.medium,
             color: COLORS.titleColor,
             marginBottom: hp(0.3),
-          }}>
+          }}
+        >
           {title}
         </TextNormal>
       )}
@@ -53,12 +54,14 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
             flexDirection: undefined,
             paddingVertical: hp(1),
           },
-        ]}>
+        ]}
+      >
         <TextInput
           keyboardType={keyboardType}
           editable={editable}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          autoCapitalize="none"
           secureTextEntry={secureTextEntry ? hidePassword : false}
           style={[
             styles.inputStyle,
@@ -68,7 +71,7 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
               maxHeight: hp(24),
               flex: undefined,
             },
-            {height: multiline ? undefined : hp(7)},
+            // { height: multiline ? undefined : hp(7) },
           ]}
           placeholder={placeholder}
           value={value}
@@ -101,7 +104,7 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
       </View>
 
       {error && (
-        <TextSmall textStyle={{color: 'red'}}>{error || null}</TextSmall>
+        <TextSmall textStyle={{ color: 'red' }}>{error || null}</TextSmall>
       )}
     </View>
   );
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: hp(0.15),
     borderColor: COLORS.btnBlack,
     backgroundColor: COLORS.inputBack,
-    paddingHorizontal: wp(3),
+    paddingHorizontal: wp(1),
     flex: 1,
     borderRadius: wp(20),
   },

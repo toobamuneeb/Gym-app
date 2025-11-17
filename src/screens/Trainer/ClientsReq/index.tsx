@@ -1,31 +1,32 @@
-import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import Header from '../../../components/common/Header';
 import Customimage from '../../../components/common/customImage';
-import {Font, ImagPath} from '../../../utils/ImagePath';
+import { Font, ImagPath } from '../../../utils/ImagePath';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {
+  TextBigger,
   TextNormal,
   TextSmall,
   TextSmaller,
 } from '../../../components/common/customText';
-import {RFValue} from 'react-native-responsive-fontsize';
+import { RFValue } from 'react-native-responsive-fontsize';
 import HomeClientCard from '../../../components/HomeClientCard';
 import CustomButton from '../../../components/common/customButton';
 import CustomBottomSheet from '../../../components/common/customBottomSheet';
-import {ScreenNames} from '../../../navigations/ScreenName';
+import { ScreenNames } from '../../../navigations/ScreenName';
 import moment from 'moment';
 import useReq from './useReq';
-import {COLORS} from '../../../utils/theme';
-import {useHome} from '../../Trainee/Home/useHome';
-import {useRoute} from '@react-navigation/native';
+import { COLORS } from '../../../utils/theme';
+import { useHome } from '../../Trainee/Home/useHome';
+import { useRoute } from '@react-navigation/native';
 
-const ClientsReq = ({navigation, route}: any) => {
-  const {data} = route.params;
+const ClientsReq = ({ navigation, route }: any) => {
+  const { data } = route.params;
   const isoDate = data?.userID?.traineeProfile?.Dob;
   const formattedDate = moment(isoDate).format('DD MMM YYYY');
 
@@ -54,12 +55,10 @@ const ClientsReq = ({navigation, route}: any) => {
   let payload = {
     reqID: data._id,
   };
-  const {plansData} = useHome({
+  const { plansData } = useHome({
     checkTraineeID: true,
     traineeID: data?.userID?._id,
   });
-
-
 
   const onNext = useCallback(() => {
     if (!selectedOption) {
@@ -67,7 +66,7 @@ const ClientsReq = ({navigation, route}: any) => {
     } else {
       refRBSheet?.current?.close();
       navigation.navigate(ScreenNames.CLIENTS_REGISTER, {
-        data: {...data, selectedOption},
+        data: { ...data, selectedOption },
       });
     }
   }, [selectedOption, onCreate]);
@@ -75,24 +74,27 @@ const ClientsReq = ({navigation, route}: any) => {
   return (
     <CustomWrapper
       edge={['top']}
-      containerStyle={{flex: 1, opacity: visible ? 0.2 : 1}}>
+      containerStyle={{ flex: 1, opacity: visible ? 0.2 : 1 }}
+    >
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}>
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <Header navigation={navigation} />
 
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Customimage
             source={ImagPath.trainer1}
             style={styles.profileImage}
             resizeMode={'cover'}
           />
 
-          <TextNormal textStyle={{marginTop: hp(2)}}>{fullName}</TextNormal>
+          <TextNormal textStyle={{ marginTop: hp(2) }}>{fullName}</TextNormal>
           <TextSmaller
             numberOfLines={1}
-            textStyle={{fontSize: RFValue(10), color: 'gray'}}>
+            textStyle={{ fontSize: RFValue(10), color: 'gray' }}
+          >
             Weight Loss
           </TextSmaller>
         </View>
@@ -115,7 +117,7 @@ const ClientsReq = ({navigation, route}: any) => {
             clientReq
           />
           <HomeClientCard
-            btnView={{backgroundColor: '#F4F4F4'}}
+            btnView={{ backgroundColor: '#F4F4F4' }}
             head="BMI"
             btmText={`${Bmi}`}
             icon="circular-graph"
@@ -129,7 +131,7 @@ const ClientsReq = ({navigation, route}: any) => {
             <TextNormal textStyle={styles.textColor}>Date of Birth</TextNormal>
             <TextSmall textStyle={styles.textColor}>{formattedDate}</TextSmall>
           </View>
-          <View style={{...styles.subView, borderBottomWidth: 0}}>
+          <View style={{ ...styles.subView, borderBottomWidth: 0 }}>
             <TextNormal textStyle={styles.textColor}>Gender</TextNormal>
             <TextSmall textStyle={styles.textColor}>
               {data?.userID?.traineeProfile?.gender}
@@ -137,28 +139,50 @@ const ClientsReq = ({navigation, route}: any) => {
           </View>
         </View>
 
+        <View style={styles.addNewTracker}>
+          <TextBigger bold={true} children={'Trackers'} />
+          <TextNormal
+            onPress={() => {
+              navigation.navigate(ScreenNames.ADD_NEW_TRACKER);
+            }}
+            children={'Add new'}
+          />
+        </View>
+        <View>
+          <CustomButton
+            centerIcon
+            text={'2 Active Trackers'}
+            color="#000"
+            containerStyle={{ gap: hp(1) }}
+            onPress={() => {}}
+          />
+        </View>
+
         <View
           style={{
             flex: 1,
             justifyContent: 'flex-end',
             marginVertical: hp(2),
-          }}>
+          }}
+        >
           {data?.status === 'accepted' ? (
             <View
               style={{
                 flex: 1,
                 justifyContent: 'flex-end',
                 marginVertical: hp(2),
-              }}>
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'row',
                   gap: hp(2),
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                }}>
+                }}
+              >
                 <CustomButton
-                  textStyle={{color: COLORS.textWhte}}
+                  textStyle={{ color: COLORS.textWhte }}
                   text="View Plan"
                   containerStyle={styles.viewPlan}
                   onPress={() => {
@@ -184,7 +208,7 @@ const ClientsReq = ({navigation, route}: any) => {
                       ? 'Edit Plan'
                       : 'Create Plan'
                   }
-                  containerStyle={{flex: 1}}
+                  containerStyle={{ flex: 1 }}
                 />
               </View>
             </View>
@@ -196,7 +220,7 @@ const ClientsReq = ({navigation, route}: any) => {
                 icon={'add'}
                 type={'material-icons'}
                 color="#000"
-                containerStyle={{gap: hp(1)}}
+                containerStyle={{ gap: hp(1) }}
                 onPress={() => {
                   onCreate();
                 }}
@@ -209,9 +233,10 @@ const ClientsReq = ({navigation, route}: any) => {
                 gap: hp(2),
                 alignItems: 'center',
                 justifyContent: 'space-between',
-              }}>
+              }}
+            >
               <CustomButton
-                textStyle={{color: '#F04438'}}
+                textStyle={{ color: '#F04438' }}
                 text="Delete"
                 containerStyle={styles.delBtnstyle}
                 onPress={() => {
@@ -224,7 +249,7 @@ const ClientsReq = ({navigation, route}: any) => {
                   handleAcceptReq(payload);
                 }}
                 text="Accept"
-                containerStyle={{flex: 1}}
+                containerStyle={{ flex: 1 }}
                 isLoading={isLoading}
               />
             </View>
@@ -235,7 +260,7 @@ const ClientsReq = ({navigation, route}: any) => {
       <CustomBottomSheet
         clientPlan
         heading="Plan Type"
-        headingStyle={{fontFamily: Font.bold}}
+        headingStyle={{ fontFamily: Font.bold }}
         mainContainerStyle={styles.bottomSheet}
         weekonPress={() => {
           setSelectedOption('weekly');
@@ -273,7 +298,7 @@ const styles = StyleSheet.create({
     height: wp(25),
     borderRadius: wp(25),
   },
-  textColor: {color: '#334155'},
+  textColor: { color: '#334155' },
   mainView: {
     marginTop: hp(4),
     borderWidth: hp(0.15),
@@ -314,5 +339,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: wp(10),
     borderTopLeftRadius: wp(10),
     paddingHorizontal: wp(4),
+  },
+  addNewTracker: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingVertical: wp(2),
   },
 });

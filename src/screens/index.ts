@@ -34,3 +34,5 @@ export {default as ClientRegister2} from './Trainer/ClientRegister2';
 export {default as ClientRegister3} from './Trainer/ClientRegister3';
 export {default as PlanSuccess} from './Trainer/PlanSuccess';
 export {default as ClientProfile} from './Trainer/ClientProfile';
+export {default as AddNewTracker} from './Trainer/AddNewTracker';
+

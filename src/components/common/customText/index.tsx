@@ -1,8 +1,8 @@
-import {StyleSheet, Text} from 'react-native';
-import {COLORS} from '../../../utils/theme';
-import {Font} from '../../../utils/ImagePath';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {customtextProp} from './interface';
+import { StyleSheet, Text } from 'react-native';
+import { COLORS } from '../../../utils/theme';
+import { Font } from '../../../utils/ImagePath';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { customtextProp } from './interface';
 import React from 'react';
 
 export const TextHuge: React.FC<customtextProp> = ({
@@ -19,10 +19,19 @@ export const TextHuge: React.FC<customtextProp> = ({
 export const TextNormal: React.FC<customtextProp> = ({
   children,
   textStyle,
+  bold,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.normal, textStyle]} {...rest}>
+    <Text
+      style={[
+        styles.text,
+        styles.normal,
+        textStyle,
+        bold && { fontFamily: Font.bold },
+      ]}
+      {...rest}
+    >
       {children}
     </Text>
   );
@@ -54,10 +63,19 @@ export const TextSmall: React.FC<customtextProp> = ({
 export const TextBig: React.FC<customtextProp> = ({
   children,
   textStyle,
+  bold,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.big, textStyle]} {...rest}>
+    <Text
+      style={[
+        styles.text,
+        styles.big,
+        textStyle,
+        bold && { fontFamily: Font.bold },
+      ]}
+      {...rest}
+    >
       {children}
     </Text>
   );
@@ -66,10 +84,19 @@ export const TextBig: React.FC<customtextProp> = ({
 export const TextBigger: React.FC<customtextProp> = ({
   children,
   textStyle,
+  bold,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.bigger, textStyle]} {...rest}>
+    <Text
+      style={[
+        styles.text,
+        styles.bigger,
+        textStyle,
+        bold && { fontFamily: Font.bold },
+      ]}
+      {...rest}
+    >
       {children}
     </Text>
   );
@@ -77,11 +104,20 @@ export const TextBigger: React.FC<customtextProp> = ({
 
 export const TextBiggest: React.FC<customtextProp> = ({
   children,
+  bold,
   textStyle,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.biggest, textStyle]} {...rest}>
+    <Text
+      style={[
+        styles.text,
+        styles.biggest,
+        textStyle,
+        bold && { fontFamily: Font.bold },
+      ]}
+      {...rest}
+    >
       {children}
     </Text>
   );

@@ -5,16 +5,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {COLORS} from '../../../utils/theme';
-import {ButtonProps} from './interface';
-import {TextNormal, TextSmall, TextSmaller} from '../customText';
-import {CustomIcon} from '../customIcons';
-import {Font, ImagPath} from '../../../utils/ImagePath';
+import { COLORS } from '../../../utils/theme';
+import { ButtonProps } from './interface';
+import { TextNormal, TextSmall, TextSmaller } from '../customText';
+import { CustomIcon } from '../customIcons';
+import { Font, ImagPath } from '../../../utils/ImagePath';
 import Customimage from '../customImage';
 
 const CustomButton: React.FC<ButtonProps> = ({
@@ -40,7 +40,6 @@ const CustomButton: React.FC<ButtonProps> = ({
 }) => {
   const isActive = Selection && Selected === value;
 
-
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -64,11 +63,12 @@ const CustomButton: React.FC<ButtonProps> = ({
           justifyContent: 'space-between',
           paddingHorizontal: wp(4),
         },
-      ]}>
+      ]}
+    >
       {pickImage ? (
         <>
           <Customimage
-            source={{uri: media?.path}}
+            source={{ uri: media?.path }}
             style={{
               width: wp(16),
               height: wp(16),
@@ -85,10 +85,11 @@ const CustomButton: React.FC<ButtonProps> = ({
               <TextNormal
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                textStyle={{fontFamily: Font.semiBold}}>
+                textStyle={{ fontFamily: Font.semiBold }}
+              >
                 {text}
               </TextNormal>
-              <TextSmaller textStyle={{color: COLORS.textGray}}>
+              <TextSmaller textStyle={{ color: COLORS.textGray }}>
                 click to upload a photo of yourself
               </TextSmaller>
             </View>
@@ -136,12 +137,12 @@ export default React.memo(CustomButton);
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: hp(1),
+    paddingVertical: hp(1.3),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: wp(10),
     flexDirection: 'row',
-    minHeight: hp(7),
+
     borderWidth: hp(0.15),
     borderColor: '#000',
   },
