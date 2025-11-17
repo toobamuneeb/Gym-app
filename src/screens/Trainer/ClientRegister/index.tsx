@@ -1,24 +1,24 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import Header from '../../../components/common/Header';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {Font} from '../../../utils/ImagePath';
-import {TextHuge, TextNormal} from '../../../components/common/customText';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { Font } from '../../../utils/ImagePath';
+import { TextHuge, TextNormal } from '../../../components/common/customText';
 import CalenderBtn from '../../../components/CalenderBtn';
-import {useForm} from 'react-hook-form';
-import {COLORS} from '../../../utils/theme';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useForm } from 'react-hook-form';
+import { COLORS } from '../../../utils/theme';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CustomButton from '../../../components/common/customButton';
-import {ScreenNames} from '../../../navigations/ScreenName';
+import { ScreenNames } from '../../../navigations/ScreenName';
 interface type {
   startingDate: null | Date;
   endingDate: null | Date;
 }
-const ClientRegister = ({navigation, route}: any) => {
-  const {data} = route.params || {};
- 
-  const {control, watch, setValue, trigger, handleSubmit} = useForm<type>({
+const ClientRegister = ({ navigation, route }: any) => {
+  const { data } = route.params || {};
+
+  const { control, watch, setValue, trigger, handleSubmit } = useForm<type>({
     defaultValues: {
       startingDate: null,
       endingDate: null,
@@ -29,10 +29,9 @@ const ClientRegister = ({navigation, route}: any) => {
   const startingDate = watch('startingDate');
   const endingDate = watch('endingDate');
   const onContinue = async () => {
-    const submit = handleSubmit(dataa => {
-     
+    const submit = handleSubmit(formValue => {
       navigation.navigate(ScreenNames.CLIENTS_REGISTER1, {
-        data: {...data, ...dataa},
+        data: { ...data, ...formValue },
       });
     });
     return submit();
@@ -58,14 +57,16 @@ const ClientRegister = ({navigation, route}: any) => {
           style={{
             flex: 1,
             justifyContent: 'center',
-          }}>
+          }}
+        >
           <TextHuge
             textStyle={{
               textAlign: 'center',
               fontFamily: Font.bold,
               fontSize: RFValue(22),
               marginVertical: hp(2),
-            }}>
+            }}
+          >
             Select Date
           </TextHuge>
 
@@ -88,7 +89,7 @@ const ClientRegister = ({navigation, route}: any) => {
           />
           <CalenderBtn
             name="endingDate"
-            titleStyle={{color: COLORS.textBlack}}
+            titleStyle={{ color: COLORS.textBlack }}
             title={'End Date'}
             // fiedlName={isDatePickerOpen}
             control={control}
@@ -109,7 +110,7 @@ const ClientRegister = ({navigation, route}: any) => {
           />
 
           <CustomButton
-            containerStyle={{marginTop: hp(4)}}
+            containerStyle={{ marginTop: hp(4) }}
             text="Continue"
             onPress={() => {
               onContinue();

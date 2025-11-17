@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1,
+    paddingVertical: wp(2),
   },
   contentContainer: {
-    flex: 0.65,
+    flex: 0.5,
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(3),

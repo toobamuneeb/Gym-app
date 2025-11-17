@@ -6,27 +6,27 @@ import { TextSmall } from '../common/customText';
 
 interface CustomCheckBoxProps {
   isChecked: boolean;
-  setIsChecked: (value: boolean) => void; // FIXED
-  id: string;
+  setIsChecked?: (value: boolean) => void;
+  id?: string;
+  title?: string;
 }
 
 const CustomCheckBox = ({
   isChecked,
   setIsChecked,
   id,
+  title,
 }: CustomCheckBoxProps) => {
   const styles = useMemo(() => style(isChecked), [isChecked]);
 
   return (
     <View style={styles.container}>
       <Pressable
-        onPress={() => setIsChecked(!isChecked)} // FIXED → returns ONLY boolean
+        onPress={() => setIsChecked?.(!isChecked)}
         style={styles.checkBox}
       />
 
-      <TextSmall>
-        {id === 'radio' ? 'Add yes/no Radio Button' : 'Add Text Option'}
-      </TextSmall>
+      <TextSmall>{title}</TextSmall>
     </View>
   );
 };

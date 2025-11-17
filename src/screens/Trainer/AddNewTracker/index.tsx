@@ -7,10 +7,12 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import CustomButton from '../../../components/common/customButton';
 
 const AddNewTracker = () => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       date: new Date().toString(),
-      trackers: [{ id: Date.now(), exercise: '', radio: false, text: false }],
+      trackers: [
+        { id: Date.now(), exercise: '', isRadio: false, isTextField: false },
+      ],
     },
   });
 
@@ -23,37 +25,47 @@ const AddNewTracker = () => {
     append({
       id: Date.now(),
       exercise: '',
-      radio: false,
-      text: false,
+      isRadio: false,
+      isTextField: false,
     });
   };
 
-  const onSubmit = (data: any) => {
-    console.log('FINAL OUTPUT:', data);
-  };
-  console.log(fields);
   return (
-    <CustomWrapper edge={['top']}>
-      <View style={{ height: 100 }}>
+    <CustomWrapper edge={['top', 'bottom']}>
+      <View style={styles.container}>
         <CustomHeader />
-      </View>
 
-      <View style={{ height: 300 }}>
         <FlatList
           data={fields}
-          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          keyExtractor={item => item?.id?.toString()}
+          ListFooterComponent={
+            <View style={styles.footer}>
+              <CustomButton text="Add New Tracker" onPress={addNewTracker} />
+            </View>
+          }
           renderItem={({ index }) => (
-            <RenderItem control={control} index={index} />
+            <RenderItem control={control} index={index} setValue={setValue} />
           )}
         />
       </View>
-
-      <CustomButton text="Add New Tracker" onPress={addNewTracker} />
-      <CustomButton text="Submit" onPress={handleSubmit(onSubmit)} />
     </CustomWrapper>
   );
 };
 
 export default AddNewTracker;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContent: {},
+  btnWrapper: {
+    paddingVertical: 20,
+    paddingBottom: 400,
+  },
+  footer: {
+    paddingVertical: 20,
+  },
+});

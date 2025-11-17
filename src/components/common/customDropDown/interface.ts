@@ -1,3 +1,5 @@
+import { ViewStyle } from "react-native";
+
 export interface DropdownProps {
   placeholder?: string;
   value?: string;
@@ -11,4 +13,5 @@ export interface DropdownProps {
   control?: any;
   rules?: any;
   onPress?: () => void;
+  dropDownStyle:ViewStyle
 }

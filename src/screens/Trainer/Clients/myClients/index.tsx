@@ -7,20 +7,20 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
 import CustomWrapper from '../../../../components/Wrappers/CustomWrapper';
 import ClientComp from '../../../../components/clientComp';
-import {ScreenNames} from '../../../../navigations/ScreenName';
-import {useLazyGetAllClientsQuery} from '../../../../redux/Api/client.api';
+import { ScreenNames } from '../../../../navigations/ScreenName';
+import { useLazyGetAllClientsQuery } from '../../../../redux/Api/client.api';
 import useClients from './useClients';
-import {TextNormal} from '../../../../components/common/customText';
-import {Font} from '../../../../utils/ImagePath';
-import {COLORS} from '../../../../utils/theme';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import { TextNormal } from '../../../../components/common/customText';
+import { Font } from '../../../../utils/ImagePath';
+import { COLORS } from '../../../../utils/theme';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-const MyClients = ({navigation}: any) => {
+const MyClients = ({ navigation }: any) => {
   const {
     clientData,
     isLoading,
@@ -33,13 +33,13 @@ const MyClients = ({navigation}: any) => {
     initialLoading,
   } = useClients();
   const renderItem = useCallback(
-    ({item, index}: {item: any; index: number}) => (
+    ({ item, index }: { item: any; index: number }) => (
       <ClientComp
         loading={initialLoading}
         item={item}
         index={index}
         onPress={() => {
-          navigation.navigate(ScreenNames.CLIENTS_REQUEST, {data: item});
+          navigation.navigate(ScreenNames.CLIENT_DETAIL, { data: item });
         }}
       />
     ),
@@ -47,19 +47,19 @@ const MyClients = ({navigation}: any) => {
   );
   const Tab_Height = useBottomTabBarHeight();
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <FlatList
         ListEmptyComponent={() => {
           if (initialLoading || isLoading.isRefresh || error) {
             return null;
           }
           return (
-            <TextNormal textStyle={{alignSelf: 'center', marginTop: hp(2)}}>
+            <TextNormal textStyle={{ alignSelf: 'center', marginTop: hp(2) }}>
               No Data Found
             </TextNormal>
           );
         }}
-        contentContainerStyle={{flexGrow: 1, paddingBottom: Tab_Height}}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: Tab_Height }}
         refreshControl={
           <RefreshControl
             refreshing={isLoading.isRefresh && !clientisFetching}
@@ -84,12 +84,14 @@ const MyClients = ({navigation}: any) => {
                 color: '#000',
                 textAlign: 'center',
                 fontFamily: Font.medium,
-              }}>
+              }}
+            >
               You have reached the end !
             </TextNormal>
           ) : error && !isLoading.isLoadMore && !isLoading.isRefresh ? (
             <TextNormal
-              style={{color: 'red', alignSelf: 'center', marginTop: hp(2)}}>
+              style={{ color: 'red', alignSelf: 'center', marginTop: hp(2) }}
+            >
               {'Error fetching data'}
             </TextNormal>
           ) : null

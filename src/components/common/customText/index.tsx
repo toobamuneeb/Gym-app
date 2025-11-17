@@ -52,10 +52,19 @@ export const TextSmaller: React.FC<customtextProp> = ({
 export const TextSmall: React.FC<customtextProp> = ({
   children,
   textStyle,
+  bold,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.small, textStyle]} {...rest}>
+    <Text
+      style={[
+        styles.text,
+        styles.small,
+        textStyle,
+        bold && { fontFamily: Font.bold },
+      ]}
+      {...rest}
+    >
       {children}
     </Text>
   );

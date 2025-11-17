@@ -40,10 +40,13 @@ const ScreenStack = () => {
       />
 
       {/* Trainer Screens  */}
-
       <Stack.Screen
-        name={ScreenNames.CLIENTS_REQUEST}
-        component={Screens.ClientsReq}
+        name={ScreenNames.ACTIVE_TRACKER}
+        component={Screens.ActiveTracker}
+      />
+      <Stack.Screen
+        name={ScreenNames.CLIENT_DETAIL}
+        component={Screens.ClientDetail}
       />
       <Stack.Screen
         name={ScreenNames.CLIENTS_REGISTER}

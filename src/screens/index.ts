@@ -27,7 +27,7 @@ export {default as Clients} from './Trainer/Clients';
 export {default as Earning} from './Trainer/Earning';
 export {default as PersonalDetails} from './Trainer/PersonalDetails';
 export {default as PersonalDetails2} from './Trainer/PersonalDetails2';
-export {default as ClientsReq} from './Trainer/ClientsReq';
+export {default as ClientDetail} from './Trainer/ClientDetail';
 export {default as ClientRegister} from './Trainer/ClientRegister';
 export {default as ClientRegister1} from './Trainer/ClientRegister1';
 export {default as ClientRegister2} from './Trainer/ClientRegister2';
@@ -35,4 +35,6 @@ export {default as ClientRegister3} from './Trainer/ClientRegister3';
 export {default as PlanSuccess} from './Trainer/PlanSuccess';
 export {default as ClientProfile} from './Trainer/ClientProfile';
 export {default as AddNewTracker} from './Trainer/AddNewTracker';
+export {default as ActiveTracker } from './Trainer/ActiveTracker';
+
 

@@ -25,7 +25,7 @@ import { COLORS } from '../../../utils/theme';
 import { useHome } from '../../Trainee/Home/useHome';
 import { useRoute } from '@react-navigation/native';
 
-const ClientsReq = ({ navigation, route }: any) => {
+const ClientDetail = ({ navigation, route }: any) => {
   const { data } = route.params;
   const isoDate = data?.userID?.traineeProfile?.Dob;
   const formattedDate = moment(isoDate).format('DD MMM YYYY');
@@ -154,7 +154,9 @@ const ClientsReq = ({ navigation, route }: any) => {
             text={'2 Active Trackers'}
             color="#000"
             containerStyle={{ gap: hp(1) }}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate(ScreenNames.ACTIVE_TRACKER);
+            }}
           />
         </View>
 
@@ -194,14 +196,16 @@ const ClientsReq = ({ navigation, route }: any) => {
                 />
                 <CustomButton
                   onPress={() => {
-                    plansData.data?.data?.days?.length
-                      ? navigation.navigate(ScreenNames.CLIENTS_REGISTER1, {
-                          data: {
-                            planID: plansData.data?.data?._id,
-                            traineeID: plansData?.data?.data?.userID,
-                          },
-                        })
-                      : refRBSheet?.current?.open();
+                    // plansData.data?.data?.days?.length
+                    //   ? navigation.navigate(ScreenNames.CLIENTS_REGISTER1, {
+                    //       data: {
+                    //         planID: plansData.data?.data?._id,
+                    //         traineeID: plansData?.data?.data?.userID,
+                    //       },
+                    //     })
+                    //   :
+
+                    refRBSheet?.current?.open();
                   }}
                   text={
                     plansData.data?.data?.days?.length
@@ -290,7 +294,7 @@ const ClientsReq = ({ navigation, route }: any) => {
   );
 };
 
-export default ClientsReq;
+export default ClientDetail;
 
 const styles = StyleSheet.create({
   profileImage: {

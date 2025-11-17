@@ -30,7 +30,7 @@ export const ScreenNames = {
   CLIENTS: 'My Clients',
   MY_CLIENTS_REQ: 'Request Clients',
   EARNINGS: 'Earning',
-  CLIENTS_REQUEST: 'Clients Request',
+  CLIENT_DETAIL: 'Client Detail',
   CLIENTS_REGISTER: 'Clients Register',
   CLIENTS_REGISTER1: 'Clients Register1',
   CLIENTS_REGISTER2: 'Clients Register2',
@@ -39,5 +39,7 @@ export const ScreenNames = {
   CLIENTS_PROFILE: 'Client Profile',
   RATING: 'Rating',
   EDIT_PROFILE: 'edit profile',
-    ADD_NEW_TRACKER: 'Add New Tracker'
+    ADD_NEW_TRACKER: 'Add New Tracker',
+    ACTIVE_TRACKER:"ActiveTracker"
+    
 };

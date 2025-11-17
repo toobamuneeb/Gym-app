@@ -1,12 +1,12 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {Controller, useForm} from 'react-hook-form';
-import {Dropdown} from 'react-native-element-dropdown';
-import {Font} from '../../../utils/ImagePath';
-import {COLORS} from '../../../utils/theme';
-import {DropdownProps} from './interface';
-import {TextNormal, TextSmall} from '../customText';
-import {RFValue} from 'react-native-responsive-fontsize';
+import { Controller, useForm } from 'react-hook-form';
+import { Dropdown } from 'react-native-element-dropdown';
+import { Font } from '../../../utils/ImagePath';
+import { COLORS } from '../../../utils/theme';
+import { DropdownProps } from './interface';
+import { TextNormal, TextSmall } from '../customText';
+import { RFValue } from 'react-native-responsive-fontsize';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -25,13 +25,14 @@ const CustomDropdown = ({
   control,
   rules,
   onPress,
+  dropDownStyle,
 }: DropdownProps) => {
   return (
     <Controller
       name={name}
       control={control}
       rules={rules}
-      render={({fieldState: {error}}) => (
+      render={({ fieldState: { error } }) => (
         <>
           {title && (
             <TextNormal textStyle={styles.subTiile}>{title}</TextNormal>
@@ -40,7 +41,11 @@ const CustomDropdown = ({
             <Dropdown
               disable={disable}
               mode="auto"
-              style={[styles.dropdown, error && {marginBottom: 0}]}
+              style={[
+                styles.dropdown,
+                error && { marginBottom: 0 },
+                dropDownStyle,
+              ]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -59,7 +64,7 @@ const CustomDropdown = ({
             />
           </Pressable>
           {error && (
-            <TextSmall textStyle={{color: 'red'}}>{error.message}</TextSmall>
+            <TextSmall textStyle={{ color: 'red' }}>{error.message}</TextSmall>
           )}
         </>
       )}
