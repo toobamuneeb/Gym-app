@@ -17,7 +17,7 @@ interface type {
 }
 const ClientRegister = ({ navigation, route }: any) => {
   const { data } = route.params || {};
-
+  console.log({ data });
   const { control, watch, setValue, trigger, handleSubmit } = useForm<type>({
     defaultValues: {
       startingDate: null,
@@ -29,6 +29,7 @@ const ClientRegister = ({ navigation, route }: any) => {
   const startingDate = watch('startingDate');
   const endingDate = watch('endingDate');
   const onContinue = async () => {
+    console.log(startingDate);
     const submit = handleSubmit(formValue => {
       navigation.navigate(ScreenNames.CLIENTS_REGISTER1, {
         data: { ...data, ...formValue },
@@ -40,7 +41,14 @@ const ClientRegister = ({ navigation, route }: any) => {
   const handleDateConfirm = (date: Date) => {
     const startingDate = new Date(date);
     const endingDate = new Date(startingDate);
-    endingDate.setDate(endingDate.getDate() + (data === 'weekly' ? 7 : 30));
+
+    if (data?.selectedOption === 'weekly') {
+      endingDate.setDate(endingDate.getDate() + 6);
+    } else {
+      endingDate.setMonth(endingDate.getMonth() + 1);
+      endingDate.setDate(endingDate.getDate() - 1);
+    }
+    console.log({ startingDate, endingDate });
     setValue('startingDate', startingDate);
     setValue('endingDate', endingDate);
     trigger?.('startingDate');

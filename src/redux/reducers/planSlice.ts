@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import moment from 'moment';
 
 // Types
 type MealItem = {
@@ -84,21 +85,18 @@ export const planSlice = createSlice({
   initialState,
   reducers: {
     addPlanItem: (state, action: PayloadAction<AddItemPayload>) => {
+
+
+      console.log("ACTIONS ADD PLAN ITEM",action.payload)
       const {
-        planType,
-        planCategory,
-        startDate,
-        endDate,
+     
         userID,
         trainerID,
         days: {dayName, sectionType, secTitle, newItem},
       } = action.payload;
 
       // Update plan metadata
-      state.data.planType = planType;
-      state.data.planCategory = planCategory;
-      state.data.startDate = startDate;
-      state.data.endDate = endDate;
+    
       state.data.userID = userID;
       state.data.trainerID = trainerID;
 
@@ -136,6 +134,39 @@ export const planSlice = createSlice({
         day.exercises.push(newItem as Exercise);
       }
     },
+addFoodItem: (state, action) => {
+  const { day, mealName, foodItem } = action.payload;
+
+  // Find the selected day in tempDataa
+  const dayIndex = state.tempDataa.findIndex(d => d.day === day);
+  if (dayIndex === -1) return;
+
+  // Find the selected meal category
+  const mealIndex = state.tempDataa[dayIndex].meals.findIndex(
+    m => m.subHeading === mealName
+  );
+  if (mealIndex === -1) return;
+
+  // Add food item to items array
+  state.tempDataa[dayIndex].meals[mealIndex].items.push(foodItem);
+},
+addExerciseItem: (state, action) => {
+  const { day, exerciseName, exerciseItem } = action.payload;
+console.log("ADD EXERCISE ITEM",action.payload)
+  const dayIndex = state.tempDataa.findIndex(d => d.day === day);
+  if (dayIndex === -1) return;
+
+  const sectionIndex = state.tempDataa[dayIndex].exercises.findIndex(
+    s => s.subHeading === exerciseName
+  );
+  if (sectionIndex === -1) return;
+
+  state.tempDataa[dayIndex].exercises[sectionIndex].items.push(exerciseItem);
+},
+
+
+
+
 
     addMealItem: (state, action) => {
       const {selectedDate} = action.payload;
@@ -248,32 +279,63 @@ export const planSlice = createSlice({
         }),
       };
     },
+copyToAll: (state, action) => {
+  const { dayPlan, startingDate, endingDate } = action.payload;
+  if (!dayPlan || !startingDate || !endingDate) return;
 
-    copytoAll: (state, action) => {
-      const days = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday',
-      ];
-      const {dayPlan} = action.payload;
+  const start = new Date(startingDate);
+  const end = new Date(endingDate);
 
-      // Validate dayPlan structure
-      if (!dayPlan || !dayPlan.meals || !Array.isArray(dayPlan.meals)) {
+  let current = new Date(start);
 
-        return;
-      }
+  while (current.getTime() <= end.getTime()) {
+    const dayISO = moment(current)
+      .utcOffset(moment().utcOffset(), true)
+      .format("YYYY-MM-DDTHH:mm:ssZ");
 
-      // Create a new array with the updated plan for all days
-      state.tempDataa = days.map(day => ({
-        day: day,
-        meals: [...dayPlan.meals], // Copy meals
-        exercises: dayPlan.exercises ? [...dayPlan.exercises] : [], // Copy exercises if they exist
-      }));
-    },
+    const existingDay = state.tempDataa.find(d => d.day === dayISO);
+
+    if (existingDay) {
+      existingDay.meals = JSON.parse(JSON.stringify(dayPlan.meals));
+      existingDay.exercises = JSON.parse(JSON.stringify(dayPlan.exercises));
+    } else {
+      state.tempDataa.push({
+        day: dayISO,
+        meals: JSON.parse(JSON.stringify(dayPlan.meals)),
+        exercises: JSON.parse(JSON.stringify(dayPlan.exercises)),
+      });
+    }
+
+    current.setDate(current.getDate() + 1);
+  }
+}
+
+,
+
+    // copytoAll: (state, action) => {
+    //   const days = [
+    //     'Monday',
+    //     'Tuesday',
+    //     'Wednesday',
+    //     'Thursday',
+    //     'Friday',
+    //     'Saturday',
+    //     'Sunday',
+    //   ];
+    //   const {dayPlan} = action.payload;
+
+
+    //   console.log({dayPlan})
+    //   if (!dayPlan || !dayPlan.meals || !Array.isArray(dayPlan.meals)) {
+
+    //     return;
+    //   }
+    //   state.tempDataa = days.map(day => ({
+    //     day: day,
+    //     meals: [...dayPlan.meals], 
+    //     exercises: dayPlan.exercises ? [...dayPlan.exercises] : [],
+    //   }));
+    // },
     resetPlan: () => initialState,
     initializePlan: (state, action: PayloadAction<PlanData>) => {
       state.data = action.payload;
@@ -290,6 +352,8 @@ export const {
   removeMealItem,
   addExercise,
   removeExercise,
-  copytoAll,
+  copyToAll,
+   addFoodItem, 
+   addExerciseItem
 } = planSlice.actions;
 export default planSlice.reducer;

@@ -1,42 +1,43 @@
-import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Onboarding from '../screens/Trainee/Onboarding';
-import {ImagPath} from '../utils/ImagePath';
+import { ImagPath } from '../utils/ImagePath';
 import * as Screen from '../screens';
-import {CustomIcon} from '../components/common/customIcons';
+import { CustomIcon } from '../components/common/customIcons';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import {TextSmall} from '../components/common/customText';
+import { TextSmall } from '../components/common/customText';
 import Customimage from '../components/common/customImage';
-import {useSelector} from 'react-redux';
-import {RootState} from '../redux/store';
-import {ScreenNames} from './ScreenName';
-import {COLORS} from '../utils/theme';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { ScreenNames } from './ScreenName';
+import { COLORS } from '../utils/theme';
 
 const Tab = createBottomTabNavigator();
 const BottomStak = () => {
   const userData = useSelector((state: RootState) => state?.generalSlice.data);
 
-  const userTabs = [
+  const coachTabs = [
     {
       id: 0,
-      name:
-        userData.role === 'coach'
-          ? ScreenNames.TRAINER_HOME
-          : ScreenNames.USER_HOME,
+      name: ScreenNames.TRAINER_HOME,
       image: ImagPath.homeIcon,
-      component: userData.role === 'coach' ? Screen.TrainerHome : Screen.Home,
+      component: Screen.TrainerHome,
     },
     {
       id: 1,
-      name:
-        userData.role === 'coach' ? ScreenNames.CLIENTS : ScreenNames.DIET_PALN,
-      image:
-        userData.role === 'coach' ? ImagPath.clientsIcon : ImagPath.dietIcon,
-      component: userData.role === 'coach' ? Screen.Clients : Screen.DietPlan,
+      name: ScreenNames.CLIENTS,
+      image: ImagPath.clientsIcon,
+      component: Screen.Clients,
     },
     {
       id: 2,
@@ -48,12 +49,39 @@ const BottomStak = () => {
       id: 3,
       name: ScreenNames.PROFILE,
       image: ImagPath.profileIcon,
-      //  source={{
-      //     uri:
-      //       userData?.traineeProfile?.profileImage ||
-      //       userData?.trainerProfile?.profileImage,
-      //   }}
       component: Screen.Profile,
+    },
+  ];
+  const userTabs = [
+    {
+      id: 0,
+      name: ScreenNames.USER_HOME,
+      image: ImagPath.homeIcon,
+      component: Screen.Home,
+    },
+    {
+      id: 1,
+      name: ScreenNames.DIET_PALN,
+      image: ImagPath.dietIcon,
+      component: Screen.DietPlan,
+    },
+    {
+      id: 2,
+      name: ScreenNames.CHAT,
+      image: ImagPath.chatIcon,
+      component: Screen.Chat,
+    },
+    {
+      id: 3,
+      name: ScreenNames.PROFILE,
+      image: ImagPath.profileIcon,
+      component: Screen.Profile,
+    },
+    {
+      id: 4,
+      name: ScreenNames.TRACKERS,
+      image: ImagPath.trackersIcon,
+      component: Screen.Trackers,
     },
     // {
     //   id: 4,
@@ -62,6 +90,8 @@ const BottomStak = () => {
     //   component: Screen.Rating,
     // },
   ];
+
+  const TABS = userData?.role === 'coach' ? coachTabs : userTabs;
 
   return (
     <Tab.Navigator
@@ -95,8 +125,9 @@ const BottomStak = () => {
           borderWidth: 1,
           borderBottomWidth: 0,
         },
-      }}>
-      {userTabs.map((item, index) => (
+      }}
+    >
+      {TABS.map((item, index) => (
         <Tab.Screen
           key={item.id}
           name={item?.name}
@@ -114,7 +145,8 @@ const BottomStak = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     paddingTop: heightPercentageToDP(2),
-                  }}>
+                  }}
+                >
                   {item.id === 3 ? (
                     <Customimage
                       disabled
@@ -148,7 +180,8 @@ const BottomStak = () => {
                     textStyle={{
                       color: focused ? '#000' : '#94A3B8',
                       marginTop: heightPercentageToDP(0.5),
-                    }}>
+                    }}
+                  >
                     {item.name}
                   </TextSmall>
                 </TouchableOpacity>

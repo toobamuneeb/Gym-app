@@ -1,21 +1,34 @@
-import { FlatList, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import React from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import CustomHeader from './Components/CustomHeader';
 import RenderItem from './Components/RenderItem';
 import { useForm, useFieldArray } from 'react-hook-form';
 import CustomButton from '../../../components/common/customButton';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import useAddNewTrackers from './Hooks/useAddNewTrackers';
 
 const AddNewTracker = () => {
-  const { control, handleSubmit, setValue } = useForm({
+  const route = useRoute<RouteProp<any, 'Add New Tracker'>>();
+  const userData = useSelector((state: RootState) => state?.generalSlice.data);
+
+  const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
-      date: new Date().toString(),
+      trainee_id: route.params?.userId,
+      tracker_date: new Date().toString(),
       trackers: [
-        { id: Date.now(), exercise: '', isRadio: false, isTextField: false },
+        {
+          question: '',
+          is_radio_button: false,
+          is_text_field: false,
+          category: '',
+        },
       ],
     },
   });
-
+  const { onSubmit, isLoading } = useAddNewTrackers(reset);
   const { fields, append } = useFieldArray({
     control,
     name: 'trackers',
@@ -23,17 +36,23 @@ const AddNewTracker = () => {
 
   const addNewTracker = () => {
     append({
-      id: Date.now(),
-      exercise: '',
-      isRadio: false,
-      isTextField: false,
+      question: '',
+      is_radio_button: false,
+      is_text_field: false,
+      category: '',
     });
   };
 
   return (
     <CustomWrapper edge={['top', 'bottom']}>
       <View style={styles.container}>
-        <CustomHeader />
+        <CustomHeader
+          isLoading={isLoading}
+          onChange={(date: Date) => {
+            setValue('tracker_date', date.toString());
+          }}
+          onPress={handleSubmit(onSubmit)}
+        />
 
         <FlatList
           data={fields}

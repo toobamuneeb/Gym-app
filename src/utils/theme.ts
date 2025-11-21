@@ -14,5 +14,6 @@ export const COLORS = {
   lightGrey: '#9EA9AA',
   trainerBottomBarActive: '#083400',
   textGray: '#9EA9AA',
-  btnGray:"#F4F4F4"
+  btnGray:"#F4F4F4",
+ lightGreen: '#EBFFDE'
 };

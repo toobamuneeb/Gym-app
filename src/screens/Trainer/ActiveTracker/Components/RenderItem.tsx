@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { COLORS } from '../../../../utils/theme';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import {
@@ -9,28 +9,35 @@ import {
 import CustomCheckBox from '../../../../components/customCheckBox';
 import CustomButton from '../../../../components/common/customButton';
 
-const RenderItem = ({ item, index }: any) => {
+const RenderItem = ({ item, index, handleApprovedTracker }: any) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <View style={styles.container}>
       <TextSmall bold children={item.question} />
-      {item?.isRadioBtn && (
+      {item?.is_radio_button && (
         <View style={styles.checkBoxContainer}>
-          <CustomCheckBox title={'Yes'} isChecked={false} />
-          <CustomCheckBox title={'No'} isChecked={true} />
+          <CustomCheckBox title={'Yes'} isChecked={item?.answer_radio_button} />
+          <CustomCheckBox title={'No'} isChecked={!item?.answer_radio_button} />
         </View>
       )}
 
-      {item?.isTextField && (
+      {item?.is_text_field && (
         <View style={styles.description}>
-          <TextSmaller
-            children={
-              'JavaScript logs have moved! They can now be viewed in React Native DevTools. Tip: Type j in the terminal to open (requires Google Chrome or Microsoft Edge).'
-            }
-          />
+          <TextSmaller children={item?.answer_text_field} />
         </View>
       )}
       <View style={{ paddingTop: wp(6) }}>
-        <CustomButton text="Approved" />
+        <CustomButton
+          isLoading={isLoading}
+          onPress={async () => {
+            setIsLoading(true);
+            const res = await handleApprovedTracker(item?._id);
+
+            setIsLoading(false);
+          }}
+          text="Approved"
+        />
       </View>
     </View>
   );

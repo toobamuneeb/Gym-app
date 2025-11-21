@@ -38,7 +38,7 @@ const usePLan = () => {
         userID: data?.userID?._id,
         days: planData,
       }
-
+console.log({payload})
 
       try {
         const res = await addPlan(payload);

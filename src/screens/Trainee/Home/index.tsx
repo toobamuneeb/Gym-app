@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import HorizontalDatePicker from '../../../components/common/customCalender';
 import {
@@ -21,21 +21,21 @@ import {
   TextBiggest,
   TextNormal,
 } from '../../../components/common/customText';
-import {Font, ImagPath} from '../../../utils/ImagePath';
+import { Font, ImagPath } from '../../../utils/ImagePath';
 import CustomPLan from '../../../components/customPlan';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {ScreenNames} from '../../../navigations/ScreenName';
-import {COLORS} from '../../../utils/theme';
-import {useHome} from './useHome';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { ScreenNames } from '../../../navigations/ScreenName';
+import { COLORS } from '../../../utils/theme';
+import { useHome } from './useHome';
 import DietPlanButton from '../../../components/customPlan/dietPlan';
 import WorkoutPlanButton from '../../../components/customPlan/workoutPlan';
 import socketServices from '../../../utils/socketservice';
-import {HomeCard} from '../../../components/HomeCardComp';
-import {useManualRefresh} from '../../../hooks/RefreshControl';
+import { HomeCard } from '../../../components/HomeCardComp';
+import { useManualRefresh } from '../../../hooks/RefreshControl';
 import CustomSearchInput from '../../../components/common/customSearchInput';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-const Home = React.memo(({navigation}: any) => {
+const Home = React.memo(({ navigation }: any) => {
   const Tab_Height = useBottomTabBarHeight();
 
   const {
@@ -51,9 +51,9 @@ const Home = React.memo(({navigation}: any) => {
     initialLoading,
     searchTrainer,
     handleSearch,
-  } = useHome();
+  } = useHome({ type: 'assigned' });
 
-  const {meals, exercises} = React.useMemo(
+  const { meals, exercises } = React.useMemo(
     () => ({
       meals: todaysPlan.data?.meals || [],
       exercises: todaysPlan.data?.exercises || [],
@@ -67,7 +67,7 @@ const Home = React.memo(({navigation}: any) => {
   );
 
   const handleNavigation = React.useCallback(
-    (name: string, data: any) => navigation.navigate(name, {data}),
+    (name: string, data: any) => navigation.navigate(name, { data }),
     [navigation],
   );
 
@@ -91,7 +91,7 @@ const Home = React.memo(({navigation}: any) => {
     }, []),
   );
   const renderItem = useCallback(
-    ({item, index}: {item: any; index: number}) => (
+    ({ item, index }: { item: any; index: number }) => (
       <HomeCard
         item={item}
         onPress={() => handleNavigation(ScreenNames.ABOUT, item)}
@@ -127,9 +127,8 @@ const Home = React.memo(({navigation}: any) => {
   };
 
   return (
-    <CustomWrapper edge={['top']} containerStyle={{paddingTop: hp(1.5)}}>
+    <CustomWrapper edge={['top']} containerStyle={{ paddingTop: hp(1.5) }}>
       <HorizontalDatePicker
-        header
         onPressNotification={() => {
           navigation.navigate('notification');
         }}
@@ -138,78 +137,79 @@ const Home = React.memo(({navigation}: any) => {
         }}
       />
 
-      {todaysPlan.data ? (
-        listHeader()
-      ) : (
-        <>
-          <CustomSearchInput
-            placeholder="Search Trainer"
-            onChangeText={handleSearch}
-            value={searchTrainer}
-          />
+      {/* listHeader()
+      ) : ( */}
 
-          <View style={{flex: 1, marginBottom: Tab_Height}}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              ListHeaderComponent={() => (
-                <TextBiggest textStyle={styles.plan}>
-                  Select Trainer
-                </TextBiggest>
-              )}
-              ListEmptyComponent={() => {
-                if (initialLoading || isLoading.isRefresh || error) {
-                  return null;
-                }
-                return (
-                  <TextNormal
-                    textStyle={{alignSelf: 'center', marginTop: hp(2)}}>
-                    No Data Found
-                  </TextNormal>
-                );
-              }}
-              numColumns={2}
-              refreshControl={
-                <RefreshControl
-                  refreshing={isLoading.isRefresh && !trainerIsFetching}
-                  onRefresh={refetchTrainers}
-                  tintColor={'#c4c4c4'}
-                />
+      {/* {todaysPlan.data && ( */}
+      <>
+        <CustomSearchInput
+          placeholder="Search Trainer"
+          onChangeText={handleSearch}
+          value={searchTrainer}
+        />
+
+        <View style={{ flex: 1, marginBottom: Tab_Height }}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={() => (
+              <TextBiggest textStyle={styles.plan}>Select Trainer</TextBiggest>
+            )}
+            ListEmptyComponent={() => {
+              if (initialLoading || isLoading.isRefresh || error) {
+                return null;
               }
-              onEndReached={loadMoreTrainers}
-              data={trainerDataa}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                padding: wp(1),
-                marginBottom: hp(1),
-              }}
-              keyExtractor={(item, index) => item?._id || index.toString()}
-              renderItem={renderItem}
-              onEndReachedThreshold={0.5}
-              ListFooterComponent={
-                isLoading.isLoadMore ? (
-                  <ActivityIndicator color={COLORS.btnBlack} size={hp(3)} />
-                ) : !isLoading.isLoadMore &&
-                  !isLoading.isRefresh &&
-                  !hasMorePages &&
-                  trainerDataa.length ? (
-                  <TextNormal
-                    style={{
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: Font.medium,
-                    }}>
-                    You have reached the end !
-                  </TextNormal>
-                ) : error && !isLoading.isLoadMore && !isLoading.isRefresh ? (
-                  <TextNormal style={{color: 'red', alignSelf: 'center'}}>
-                    {'Error fetching data'}
-                  </TextNormal>
-                ) : null
-              }
-            />
-          </View>
-        </>
-      )}
+              return (
+                <TextNormal
+                  textStyle={{ alignSelf: 'center', marginTop: hp(2) }}
+                >
+                  No Data Found
+                </TextNormal>
+              );
+            }}
+            numColumns={2}
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoading.isRefresh && !trainerIsFetching}
+                onRefresh={refetchTrainers}
+                tintColor={'#c4c4c4'}
+              />
+            }
+            onEndReached={loadMoreTrainers}
+            data={trainerDataa}
+            columnWrapperStyle={{
+              justifyContent: 'space-between',
+              padding: wp(1),
+              marginBottom: hp(1),
+            }}
+            keyExtractor={(item, index) => item?._id || index.toString()}
+            renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              isLoading.isLoadMore ? (
+                <ActivityIndicator color={COLORS.btnBlack} size={hp(3)} />
+              ) : !isLoading.isLoadMore &&
+                !isLoading.isRefresh &&
+                !hasMorePages &&
+                trainerDataa.length ? (
+                <TextNormal
+                  style={{
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: Font.medium,
+                  }}
+                >
+                  You have reached the end !
+                </TextNormal>
+              ) : error && !isLoading.isLoadMore && !isLoading.isRefresh ? (
+                <TextNormal style={{ color: 'red', alignSelf: 'center' }}>
+                  {'Error fetching data'}
+                </TextNormal>
+              ) : null
+            }
+          />
+        </View>
+      </>
+      {/* )} */}
     </CustomWrapper>
   );
 });

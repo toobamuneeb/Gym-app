@@ -1,63 +1,76 @@
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  SectionList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useCallback } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import { TextBiggest, TextSmall } from '../../../components/common/customText';
 import CustomDatePicker from '../../../components/common/CustomDatePicker';
 import { useForm } from 'react-hook-form';
 import RenderItem from './Components/RenderItem';
+import useActiveTrackers from './Hooks/useActiveTrackers';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import moment from 'moment';
+import { COLORS } from '../../../utils/theme';
 
-let data = [
-  {
-    date: '10/25/2025',
-    tracker: [
-      {
-        question: 'Did you meet your protein goal today?',
-        isRadioBtn: true,
-        isTextField: true,
-      },
-      {
-        question: 'Did you meet your protein goal today?',
-        isRadioBtn: false,
-        isTextField: true,
-      },
-    ],
-  },
-  {
-    date: '10/25/2025',
-    tracker: [
-      {
-        question: 'Did you meet your protein goal today?',
-        isRadioBtn: true,
-        isTextField: true,
-      },
-    ],
-  },
-];
-const sections = data.map(item => ({
-  title: item.date,
-  data: item.tracker,
-}));
 const ActiveTracker = () => {
-  const onChange = () => {};
+  const route = useRoute<RouteProp<any, 'ActiveTracker'>>();
+  const { trainee_id } = route?.params || {};
+  const {
+    data: i,
+    handleApprovedTracker,
+    loading,
+    handleGetTrackers,
+    onChange,
+    isFetching,
+  } = useActiveTrackers(trainee_id);
 
-  const renderItem = useCallback(({ item, index }: any) => {
-    return <RenderItem item={item} index={index} />;
-  }, []);
+  const section = i?.map?.((item: any) => ({
+    title: new Date(item?.tracker_date),
+    data: item?.questions,
+  }));
+  const renderItem = useCallback(
+    ({ item, index }: any) => {
+      return (
+        <RenderItem
+          item={item}
+          index={index}
+          handleApprovedTracker={handleApprovedTracker}
+        />
+      );
+    },
+    [handleApprovedTracker],
+  );
 
   return (
     <CustomWrapper edge={['top', 'bottom']}>
       <View style={styles.headerContain}>
-        <TextBiggest bold children={'Active Tracker'} />
+        <TextBiggest bold children={'Active Trackers'} />
         <CustomDatePicker onChange={onChange} />
       </View>
       <SectionList
-        sections={sections}
+        sections={section || []}
         renderItem={renderItem}
+        ListEmptyComponent={
+          <View style={styles.listEmptyContainer}>
+            {isFetching ? (
+              <ActivityIndicator size={'large'} color={COLORS.Green} />
+            ) : (
+              <TextBiggest children={'No Active Trackers'} />
+            )}
+          </View>
+        }
         showsVerticalScrollIndicator={false}
         renderSectionHeader={({ section: { title } }) => (
           <View style={{ alignItems: 'center', paddingVertical: wp(2) }}>
-            <TextSmall bold>{title}</TextSmall>
+            <TextSmall bold>{moment(title).format('YYYY/MM/DD')}</TextSmall>
           </View>
         )}
         stickySectionHeadersEnabled={false}
@@ -74,5 +87,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: wp(4),
     alignSelf: 'center',
+    paddingVertical: wp(4),
+  },
+  listEmptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: heightPercentageToDP(60),
   },
 });

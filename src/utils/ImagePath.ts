@@ -6,6 +6,8 @@ export const ImagPath = {
   NewPasImg: require('../assets/NewPass/NewPasImg.png'),
   homeIcon: require('../assets/BottomTabIcons/home.png'),
   dietIcon: require('../assets/BottomTabIcons/dietplan.png'),
+  trackersIcon: require('../assets/BottomTabIcons/trackers.png'),
+
   chatIcon: require('../assets/BottomTabIcons/chat.png'),
   profileIcon: require('../assets/BottomTabIcons/profile.png'),
   clientsIcon: require('../assets/BottomTabIcons/people.png'),
@@ -16,6 +18,7 @@ export const ImagPath = {
   trainer1: require('../assets/Home/trainer1.jpg'),
   aboutTrainer: require('../assets/About/aboutTrainer.png'),
   poster: require('../assets/About/poster.png'),
+  
 };
 
 export const Font = {

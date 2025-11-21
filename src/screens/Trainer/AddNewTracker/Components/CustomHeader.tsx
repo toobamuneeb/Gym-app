@@ -1,19 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {
-  TextBig,
-  TextBigger,
-  TextNormal,
-} from '../../../../components/common/customText';
+import { TextBig } from '../../../../components/common/customText';
 import CustomButton from '../../../../components/common/customButton';
-import {
-  heightPercentageToDP,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { CustomIcon } from '../../../../components/common/customIcons';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import CustomDatePicker from '../../../../components/common/CustomDatePicker';
 
-const CustomHeader = ({ onChange }: any) => {
+interface CustomHeaderProps {
+  onChange?: (date: Date) => void;
+  onPress?: () => void;
+  isLoading: boolean;
+}
+
+const CustomHeader = ({ onChange, onPress, isLoading }: CustomHeaderProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -22,10 +20,11 @@ const CustomHeader = ({ onChange }: any) => {
       </View>
       <View style={{ flex: 0.35 }}>
         <CustomButton
+          isLoading={isLoading}
           centerIcon
           text={'Publish now'}
           color="#000"
-          onPress={() => {}}
+          onPress={onPress}
         />
       </View>
     </View>

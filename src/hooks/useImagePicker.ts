@@ -1,3 +1,4 @@
+import { use, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -11,10 +12,10 @@ const useImagePicker = () => {
       media: null,
     },
   });
-
+const [val,setVal]=useState<any>(null);
   const selectedMedia = watch('media');
 
-  const maxFileSizeInBytes = 50 * 1024 * 1024; // 50MB in bytes
+  const maxFileSizeInBytes = 500 * 1024 * 1024; // 50MB in bytes
 
   const openCamera = async ({mediaType}: any) => {
     let config = {
@@ -45,6 +46,13 @@ const useImagePicker = () => {
       //     return Alert.alert("'Video Found';");
       //   }
       setValue('media', {
+        path: res?.path || res.sourceURL,
+        mime: res?.mime,
+        name: res?.filename,
+      });
+
+setVal({
+    
         path: res?.path || res.sourceURL,
         mime: res?.mime,
         name: res?.filename,
@@ -83,7 +91,11 @@ const useImagePicker = () => {
         return;
       }
       if (res.mime.includes('video')) {
-        return Alert.alert("'Video Found';");
+       setVal({
+        path: res?.path || res.sourceURL,
+        mime: res?.mime,
+        name: res?.filename,
+      });
       }
       setValue('media', {
         path: res?.path || res.sourceURL,
@@ -103,6 +115,7 @@ const useImagePicker = () => {
     openCamera,
     openGallery,
     selectedMedia,
+    val
   };
 };
 

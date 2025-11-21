@@ -21,24 +21,23 @@ let data = [
 
 const RenderItem = ({ control, index, setValue }: any) => {
   const [type, setType] = useState([]);
-  console.log(type?.[index]);
 
   return (
     <View style={styles.container}>
       <CustomRHFTextInput
         control={control}
-        name={`trackers.${index}.exercise`}
+        name={`trackers.${index}.question`}
         title="Basic tracker info"
         placeholder="Add question here"
         rules={{
-          required: { value: true, message: 'exercise name is required' },
+          required: { value: true, message: 'question name is required' },
         }}
         inputContainer={{ borderWidth: 0, borderRadius: 5, height: wp(12) }}
       />
 
       <Controller
         control={control}
-        name={`trackers.${index}.isRadio`}
+        name={`trackers.${index}.is_radio_button`}
         render={({ field: { value, onChange } }) => (
           <CustomCheckBox
             id="radio"
@@ -51,11 +50,11 @@ const RenderItem = ({ control, index, setValue }: any) => {
 
       <Controller
         control={control}
-        name={`trackers.${index}.isTextField`}
+        name={`trackers.${index}.is_text_field`}
         rules={{
           validate: (_, formValues) =>
-            formValues.trackers[index].isRadio ||
-            formValues.trackers[index].isTextField ||
+            formValues.trackers[index].is_radio_button ||
+            formValues.trackers[index].is_text_field ||
             'Select any of the options',
         }}
         render={({ field: { value, onChange }, fieldState: { error } }) => {
@@ -95,9 +94,9 @@ const RenderItem = ({ control, index, setValue }: any) => {
           placeholder={'Select Category type'}
           data={data}
           value={type?.[index]}
-          name={`trackers.${index}.CategoryType`}
+          name={`trackers.${index}.category`}
           onChange={item => {
-            setValue(`trackers.${index}.CategoryType`, item.value);
+            setValue(`trackers.${index}.category`, item.value);
             setType((prev: any) => ({
               ...prev,
               [index]: item.value,

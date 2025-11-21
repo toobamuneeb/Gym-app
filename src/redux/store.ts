@@ -20,6 +20,7 @@ import {trainers} from './Api/trainer.api';
 import {client} from './Api/client.api';
 import {plan} from './Api/plan.api';
 import {rating} from './Api/rating.api';
+import { trackers } from './Api/trackers.api';
 const persistConfig = {
   key: 'root',
   storage: MMKVStorage,
@@ -44,6 +45,7 @@ export const store = configureStore({
       client.middleware,
       plan.middleware,
       rating.middleware,
+      trackers.middleware
     ),
 });
 export type RootState = ReturnType<typeof store.getState>;

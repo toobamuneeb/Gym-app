@@ -9,6 +9,8 @@ import {client} from '../Api/client.api';
 import {plan} from '../Api/plan.api';
 import {rating} from '../Api/rating.api';
 import {planSlice} from './planSlice';
+import { trackers } from '../Api/trackers.api';
+
 
 const appReducer = combineReducers({
   generalSlice: generalSlice.reducer,
@@ -19,6 +21,8 @@ const appReducer = combineReducers({
   [client.reducerPath]: client.reducer,
   [plan.reducerPath]: plan.reducer,
   [rating.reducerPath]: rating.reducer,
+  [trackers.reducerPath]: trackers.reducer,
+
   planSlice: planSlice.reducer,
 });
 

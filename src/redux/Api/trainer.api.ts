@@ -1,5 +1,5 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {baseQuery} from './baseQuery';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { baseQuery } from './baseQuery';
 
 export const trainers = createApi({
   reducerPath: 'trainers',
@@ -7,10 +7,9 @@ export const trainers = createApi({
 
   endpoints: builder => ({
     getallTrainers: builder.query({
-      query: ({page, search}) => {
-
+      query: ({ page, search, type }) => {
         return {
-          url: `trainer/getalltrainer?name=${search}&page=${page}&limit=10`,
+          url: `trainer/getalltrainer?name=${search}&page=${page}&limit=10&type=${type}`,
           method: 'GET',
         };
       },

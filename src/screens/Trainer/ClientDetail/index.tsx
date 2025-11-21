@@ -143,7 +143,9 @@ const ClientDetail = ({ navigation, route }: any) => {
           <TextBigger bold={true} children={'Trackers'} />
           <TextNormal
             onPress={() => {
-              navigation.navigate(ScreenNames.ADD_NEW_TRACKER);
+              navigation.navigate(ScreenNames.ADD_NEW_TRACKER, {
+                userId: data?.userID?._id,
+              });
             }}
             children={'Add new'}
           />
@@ -151,11 +153,13 @@ const ClientDetail = ({ navigation, route }: any) => {
         <View>
           <CustomButton
             centerIcon
-            text={'2 Active Trackers'}
+            text={'Active Trackers'}
             color="#000"
             containerStyle={{ gap: hp(1) }}
             onPress={() => {
-              navigation.navigate(ScreenNames.ACTIVE_TRACKER);
+              navigation.navigate(ScreenNames.ACTIVE_TRACKER, {
+                trainee_id: data?.userID?._id,
+              });
             }}
           />
         </View>
@@ -204,7 +208,6 @@ const ClientDetail = ({ navigation, route }: any) => {
                     //       },
                     //     })
                     //   :
-
                     refRBSheet?.current?.open();
                   }}
                   text={

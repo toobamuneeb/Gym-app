@@ -1,20 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useGetAllPlansQuery,
   useGetTodaysPlanQuery,
   useGetbyIDQuery,
 } from '../../../redux/Api/plan.api';
-import {useLazyGetallTrainersQuery} from '../../../redux/Api/trainer.api';
-import {RTK_QUERY_CONFIG} from '../../../utils/constant';
+import { useLazyGetallTrainersQuery } from '../../../redux/Api/trainer.api';
+import { RTK_QUERY_CONFIG } from '../../../utils/constant';
 import useDebounce from '../../../hooks/Debounce';
 
 interface HomeHookOptions {
   traineeID?: string;
   checkTraineeID?: boolean;
+  type?: string | undefined;
 }
 
 export const useHome = (options: HomeHookOptions = {}) => {
-  const {traineeID, checkTraineeID} = options;
+  const { traineeID, checkTraineeID, type } = options;
 
   const [initialLoading, setInitialLoading] = useState(true);
   const [searchTrainer, setsearchTrainer] = useState('');
@@ -32,7 +33,7 @@ export const useHome = (options: HomeHookOptions = {}) => {
   );
 
   const singlePlanQuery = useGetbyIDQuery(
-    {traineeID: traineeID},
+    { traineeID: traineeID },
     {
       ...RTK_QUERY_CONFIG,
       skip: !traineeID,
@@ -60,16 +61,17 @@ export const useHome = (options: HomeHookOptions = {}) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    refetchTrainers();
+    refetchTrainers(type);
   }, []);
   useEffect(() => {
-    refetchTrainers();
+    refetchTrainers(type);
   }, [debouncedValue]);
 
   const fetchTrainersData = async (
     isRefresh: boolean,
     pageNumber: number,
     search: string,
+    type: string | undefined,
   ) => {
     if (
       isLoading.isRefresh ||
@@ -84,11 +86,11 @@ export const useHome = (options: HomeHookOptions = {}) => {
     });
 
     try {
-      const res = await fetchTrainers({page: pageNumber, search});
-   
+      const res = await fetchTrainers({ page: pageNumber, search, type });
+      console.log({ res });
       if (!res?.data) {
         setError(true);
-        setIsLoading({isLoadMore: false, isRefresh: false});
+        setIsLoading({ isLoadMore: false, isRefresh: false });
         setInitialLoading(false);
         return;
       }
@@ -104,22 +106,21 @@ export const useHome = (options: HomeHookOptions = {}) => {
         setPage(pageNumber);
       }
     } catch (error) {
-     
       setError(true);
     } finally {
-      setIsLoading({isLoadMore: false, isRefresh: false});
+      setIsLoading({ isLoadMore: false, isRefresh: false });
       setInitialLoading(false); // Add this
     }
   };
 
-  const refetchTrainers = () => {
-    fetchTrainersData(true, 1, debouncedValue);
+  const refetchTrainers = (type: string | undefined) => {
+    fetchTrainersData(true, 1, debouncedValue, type);
   };
 
   const loadMoreTrainers = () => {
     if (error) return;
     if (hasMorePages) {
-      fetchTrainersData(false, page + 1, debouncedValue);
+      fetchTrainersData(false, page + 1, debouncedValue, type);
     }
   };
 

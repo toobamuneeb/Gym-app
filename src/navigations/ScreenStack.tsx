@@ -38,6 +38,10 @@ const ScreenStack = () => {
         name={ScreenNames.EDIT_PROFILE}
         component={Screens.EditProfile}
       />
+      <Stack.Screen
+        name={ScreenNames.TRACKERS_LIST}
+        component={Screens.TrackersList}
+      />
 
       {/* Trainer Screens  */}
       <Stack.Screen

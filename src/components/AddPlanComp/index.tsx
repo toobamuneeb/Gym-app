@@ -1,22 +1,22 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {COLORS} from '../../utils/theme';
+import { COLORS } from '../../utils/theme';
 import {
   TextBig,
   TextBiggest,
   TextNormal,
   TextSmall,
 } from '../common/customText';
-import {Font} from '../../utils/ImagePath';
+import { Font } from '../../utils/ImagePath';
 import CustomButton from '../common/customButton';
-import {planProps} from './interface';
-import {CustomIcon} from '../common/customIcons';
-import {useDispatch} from 'react-redux';
-import {removeExercise} from '../../redux/reducers/planSlice';
+import { planProps } from './interface';
+import { CustomIcon } from '../common/customIcons';
+import { useDispatch } from 'react-redux';
+import { removeExercise } from '../../redux/reducers/planSlice';
 
 const CustomAddPlan = ({
   onPress,
@@ -29,8 +29,6 @@ const CustomAddPlan = ({
   exercise = false,
   day,
 }: planProps) => {
-
-
   const dispatch = useDispatch();
   return (
     <View style={styles.mainContainer}>
@@ -39,8 +37,9 @@ const CustomAddPlan = ({
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-        }}>
-        <TextBig textStyle={{fontFamily: Font.bold}}>{title}</TextBig>
+        }}
+      >
+        <TextBig textStyle={{ fontFamily: Font.bold }}>{title}</TextBig>
 
         {!exercise && (
           <CustomIcon
@@ -53,34 +52,39 @@ const CustomAddPlan = ({
         )}
       </View>
       {data &&
-        data?.map((item, index) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
+        data?.map((item, index) => {
+          console.log({ item });
+          return (
             <View
-              style={{marginVertical: hp(0.5), flexDirection: 'row'}}
-              key={index}>
-              <TextNormal>{index + 1 + ` : `}</TextNormal>
-              <View>
-                <TextNormal>{item?.name}</TextNormal>
-                <TextSmall>{item?.description || item?.quantity}</TextSmall>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View
+                style={{ marginVertical: hp(0.5), flexDirection: 'row' }}
+                key={index}
+              >
+                <TextNormal>{index + 1 + ` : `}</TextNormal>
+                <View>
+                  <TextNormal>{item?.name}</TextNormal>
+                  <TextSmall>{item?.description || item?.quantity}</TextSmall>
+                </View>
               </View>
+              {exercise && (
+                <CustomIcon
+                  icon="cross"
+                  type="entypo"
+                  size={wp(6)}
+                  color="#000"
+                  onPress={() =>
+                    dispatch(removeExercise({ day: day, index: index }))
+                  }
+                />
+              )}
             </View>
-            {exercise && (
-              <CustomIcon
-                icon="cross"
-                type="entypo"
-                size={wp(6)}
-                color="#000"
-                onPress={() =>
-                  dispatch(removeExercise({day: day, index: index}))
-                }
-              />
-            )}
-          </View>
-        ))}
+          );
+        })}
       <CustomButton
         onPress={onPress}
         containerStyle={styles.btnStyle}

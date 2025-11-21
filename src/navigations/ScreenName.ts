@@ -39,7 +39,8 @@ export const ScreenNames = {
   CLIENTS_PROFILE: 'Client Profile',
   RATING: 'Rating',
   EDIT_PROFILE: 'edit profile',
-    ADD_NEW_TRACKER: 'Add New Tracker',
-    ACTIVE_TRACKER:"ActiveTracker"
-    
+  ADD_NEW_TRACKER: 'Add New Tracker',
+  ACTIVE_TRACKER: 'ActiveTracker',
+  TRACKERS: 'Trackers',
+  TRACKERS_LIST: 'TrackersList',
 };

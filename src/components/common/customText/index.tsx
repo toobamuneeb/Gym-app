@@ -40,10 +40,15 @@ export const TextNormal: React.FC<customtextProp> = ({
 export const TextSmaller: React.FC<customtextProp> = ({
   children,
   textStyle,
+  bold,
+  color,
   ...rest
 }) => {
   return (
-    <Text style={[styles.text, styles.smaller, textStyle]} {...rest}>
+    <Text
+      style={[styles.text, styles.smaller, textStyle, color && { color }]}
+      {...rest}
+    >
       {children}
     </Text>
   );
@@ -114,6 +119,7 @@ export const TextBigger: React.FC<customtextProp> = ({
 export const TextBiggest: React.FC<customtextProp> = ({
   children,
   bold,
+  center,
   textStyle,
   ...rest
 }) => {
@@ -124,6 +130,7 @@ export const TextBiggest: React.FC<customtextProp> = ({
         styles.biggest,
         textStyle,
         bold && { fontFamily: Font.bold },
+        center && { textAlign: 'center' },
       ]}
       {...rest}
     >
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(14),
   },
   smaller: {
-    fontSize: RFValue(11),
+    fontSize: RFValue(10),
   },
 
   small: {
