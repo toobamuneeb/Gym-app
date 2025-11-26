@@ -17,6 +17,7 @@ import { planProps } from './interface';
 import { CustomIcon } from '../common/customIcons';
 import { useDispatch } from 'react-redux';
 import { removeExercise } from '../../redux/reducers/planSlice';
+import CustomWebViewVideoPlayer from '../common/customWebViewVideoPlayer';
 
 const CustomAddPlan = ({
   onPress,
@@ -30,6 +31,7 @@ const CustomAddPlan = ({
   day,
 }: planProps) => {
   const dispatch = useDispatch();
+
   return (
     <View style={styles.mainContainer}>
       <View
@@ -53,34 +55,40 @@ const CustomAddPlan = ({
       </View>
       {data &&
         data?.map((item, index) => {
-          console.log({ item });
           return (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
+            <View>
               <View
-                style={{ marginVertical: hp(0.5), flexDirection: 'row' }}
-                key={index}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
               >
-                <TextNormal>{index + 1 + ` : `}</TextNormal>
-                <View>
-                  <TextNormal>{item?.name}</TextNormal>
-                  <TextSmall>{item?.description || item?.quantity}</TextSmall>
+                <View
+                  style={{ marginVertical: hp(0.5), flexDirection: 'row' }}
+                  key={index}
+                >
+                  <TextNormal>{index + 1 + ` : `}</TextNormal>
+                  <View>
+                    <TextNormal>{item?.name}</TextNormal>
+                    <TextSmall>{item?.description || item?.quantity}</TextSmall>
+                  </View>
                 </View>
+
+                {exercise && (
+                  <CustomIcon
+                    icon="cross"
+                    type="entypo"
+                    size={wp(6)}
+                    color="#000"
+                    onPress={() =>
+                      dispatch(removeExercise({ day: day, index: index }))
+                    }
+                  />
+                )}
               </View>
-              {exercise && (
-                <CustomIcon
-                  icon="cross"
-                  type="entypo"
-                  size={wp(6)}
-                  color="#000"
-                  onPress={() =>
-                    dispatch(removeExercise({ day: day, index: index }))
-                  }
-                />
+
+              {item?.video?.uri && (
+                <CustomWebViewVideoPlayer uri={item?.video?.uri} />
               )}
             </View>
           );

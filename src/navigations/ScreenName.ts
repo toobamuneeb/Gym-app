@@ -42,5 +42,7 @@ export const ScreenNames = {
   ADD_NEW_TRACKER: 'Add New Tracker',
   ACTIVE_TRACKER: 'ActiveTracker',
   TRACKERS: 'Trackers',
+  EXERCISE_PLAN: 'Exercise',
   TRACKERS_LIST: 'TrackersList',
+  EXERCISE_LIST: 'ExerciseList',
 };

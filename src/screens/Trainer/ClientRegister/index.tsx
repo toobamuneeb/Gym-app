@@ -1,23 +1,29 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import Header from '../../../components/common/Header';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Font } from '../../../utils/ImagePath';
-import { TextHuge, TextNormal } from '../../../components/common/customText';
+import {
+  TextHuge,
+  TextNormal,
+  TextSmaller,
+} from '../../../components/common/customText';
 import CalenderBtn from '../../../components/CalenderBtn';
 import { useForm } from 'react-hook-form';
 import { COLORS } from '../../../utils/theme';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CustomButton from '../../../components/common/customButton';
 import { ScreenNames } from '../../../navigations/ScreenName';
+import { useGetLastDatePlanQuery } from '../../../redux/Api/plan.api';
+import moment from 'moment';
 interface type {
   startingDate: null | Date;
   endingDate: null | Date;
 }
 const ClientRegister = ({ navigation, route }: any) => {
   const { data } = route.params || {};
-  console.log({ data });
+
   const { control, watch, setValue, trigger, handleSubmit } = useForm<type>({
     defaultValues: {
       startingDate: null,
@@ -25,9 +31,12 @@ const ClientRegister = ({ navigation, route }: any) => {
     },
   });
   // const [isDatePickerOpen, setIsDatePickerOpen] = useState('');
+
+  const { data: lastDate, isLoading } = useGetLastDatePlanQuery({});
   const [open, setOpen] = useState(false);
   const startingDate = watch('startingDate');
   const endingDate = watch('endingDate');
+
   const onContinue = async () => {
     console.log(startingDate);
     const submit = handleSubmit(formValue => {
@@ -38,7 +47,25 @@ const ClientRegister = ({ navigation, route }: any) => {
     return submit();
   };
 
+  const [minDate, setMinDate] = useState(new Date());
+  console.log(lastDate?.nextDate);
+  useLayoutEffect(() => {
+    if (lastDate?.nextDate) {
+      setMinDate(lastDate?.nextDate);
+    }
+  }, [lastDate?.nextDate]);
+
   const handleDateConfirm = (date: Date) => {
+    const nextAllowed = new Date(minDate);
+
+    if (date < nextAllowed) {
+      setOpen(false);
+      return Alert.alert(
+        'Invalid Date',
+        `Please select a date on or after ${nextAllowed.toDateString()}`,
+      );
+    }
+
     const startingDate = new Date(date);
     const endingDate = new Date(startingDate);
 
@@ -55,7 +82,7 @@ const ClientRegister = ({ navigation, route }: any) => {
     trigger?.('endingDate');
     setOpen(false);
   };
-
+  console.log({ minDate });
   return (
     <CustomWrapper>
       <Header navigation={navigation} />
@@ -80,6 +107,7 @@ const ClientRegister = ({ navigation, route }: any) => {
 
           <CalenderBtn
             name="startingDate"
+            minimumDate={minDate}
             // fiedlName={isDatePickerOpen}
             title={'Starting Date'}
             control={control}
@@ -103,19 +131,17 @@ const ClientRegister = ({ navigation, route }: any) => {
             control={control}
             date={endingDate || new Date()}
             palceholder="mm/dd/yyyy"
-            // openDatePicker={() => {
-            //   setIsDatePickerOpen('endingDate');
-            // }}
-            // onCancel={() => {
-            //   setIsDatePickerOpen('');
-            // }}
-            // onConfirm={date => {
-            //   setValue('endingDate', date);
-            //   trigger('endingDate');
-            //   setIsDatePickerOpen('');
-            // }}
             errorMessage="ending date required"
           />
+
+          <View>
+            <TextSmaller
+              color="red"
+              children={`⚠️ Your next plan must start from ${moment(
+                minDate,
+              ).format('YYYY MMM DD')} `}
+            />
+          </View>
 
           <CustomButton
             containerStyle={{ marginTop: hp(4) }}

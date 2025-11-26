@@ -1,7 +1,7 @@
 import React from 'react';
-import {Pressable} from 'react-native';
-import {COLORS} from '../../utils/theme';
-import {TextBigger} from '../common/customText';
+import { Pressable } from 'react-native';
+import { COLORS } from '../../utils/theme';
+import { TextBigger } from '../common/customText';
 import CustomPLanComponent from './index';
 import {
   heightPercentageToDP as hp,
@@ -9,7 +9,7 @@ import {
 } from 'react-native-responsive-screen';
 
 const DietPlanButton = React.memo(
-  ({meals, onPress}: {meals: any[]; onPress: () => void}) => (
+  ({ meals, onPress }: { meals: any[]; onPress: () => void }) => (
     <Pressable
       onPress={onPress}
       style={{
@@ -18,7 +18,8 @@ const DietPlanButton = React.memo(
         padding: hp(2),
         borderWidth: hp(0.15),
         marginBottom: hp(2),
-      }}>
+      }}
+    >
       <TextBigger>Diet Plan</TextBigger>
       {meals.map((item, index) => (
         <CustomPLanComponent

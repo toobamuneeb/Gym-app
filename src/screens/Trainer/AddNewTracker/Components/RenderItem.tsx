@@ -14,8 +14,24 @@ import CustomCheckBox from '../../../../components/customCheckBox';
 
 let data = [
   {
-    label: 'text',
-    value: 'Text',
+    label: 'Fitness',
+    value: 'Fitness',
+  },
+  {
+    label: 'Strength Training',
+    value: 'Strength Training',
+  },
+  {
+    label: 'Functional Training',
+    value: 'Functional Training',
+  },
+  {
+    label: 'Sports & Performance',
+    value: 'Sports & Performance',
+  },
+  {
+    label: 'Yoga & Mindfulness',
+    value: 'Yoga & Mindfulness',
   },
 ];
 

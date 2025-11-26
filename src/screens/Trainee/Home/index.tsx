@@ -1,28 +1,20 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   RefreshControl,
-  ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
-import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import HorizontalDatePicker from '../../../components/common/customCalender';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {
-  TextBigger,
-  TextBiggest,
-  TextNormal,
-} from '../../../components/common/customText';
-import { Font, ImagPath } from '../../../utils/ImagePath';
-import CustomPLan from '../../../components/customPlan';
+import { TextBiggest, TextNormal } from '../../../components/common/customText';
+import { Font } from '../../../utils/ImagePath';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { ScreenNames } from '../../../navigations/ScreenName';
 import { COLORS } from '../../../utils/theme';
@@ -31,13 +23,12 @@ import DietPlanButton from '../../../components/customPlan/dietPlan';
 import WorkoutPlanButton from '../../../components/customPlan/workoutPlan';
 import socketServices from '../../../utils/socketservice';
 import { HomeCard } from '../../../components/HomeCardComp';
-import { useManualRefresh } from '../../../hooks/RefreshControl';
 import CustomSearchInput from '../../../components/common/customSearchInput';
 import { useFocusEffect } from '@react-navigation/native';
 
 const Home = React.memo(({ navigation }: any) => {
   const Tab_Height = useBottomTabBarHeight();
-
+  const [type, setType] = useState<string>('all');
   const {
     trainerData,
     todaysPlan,
@@ -51,7 +42,7 @@ const Home = React.memo(({ navigation }: any) => {
     initialLoading,
     searchTrainer,
     handleSearch,
-  } = useHome({ type: 'assigned' });
+  } = useHome({ type: type });
 
   const { meals, exercises } = React.useMemo(
     () => ({
@@ -87,8 +78,8 @@ const Home = React.memo(({ navigation }: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      refetchTrainers();
-    }, []),
+      refetchTrainers(type);
+    }, [type]),
   );
   const renderItem = useCallback(
     ({ item, index }: { item: any; index: number }) => (
@@ -152,20 +143,50 @@ const Home = React.memo(({ navigation }: any) => {
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={() => (
-              <TextBiggest textStyle={styles.plan}>Select Trainer</TextBiggest>
-            )}
-            ListEmptyComponent={() => {
-              if (initialLoading || isLoading.isRefresh || error) {
-                return null;
-              }
-              return (
+              <Pressable onPress={() => {}} style={styles.tabContainer}>
                 <TextNormal
-                  textStyle={{ alignSelf: 'center', marginTop: hp(2) }}
-                >
-                  No Data Found
-                </TextNormal>
-              );
-            }}
+                  onPress={() => {
+                    setType('all');
+                  }}
+                  style={
+                    type == 'all'
+                      ? styles.tabActiveStyle
+                      : styles.tabUnActiveStyle
+                  }
+                  children={'All Trainers'}
+                />
+                <TextNormal
+                  onPress={() => {
+                    setType('assigned');
+                  }}
+                  style={
+                    type !== 'all'
+                      ? styles.tabActiveStyle
+                      : styles.tabUnActiveStyle
+                  }
+                  children={'Assign Trainers'}
+                />
+              </Pressable>
+            )}
+            ListEmptyComponent={
+              <>
+                {trainerDataa?.length == 0 && !trainerIsFetching && (
+                  <TextNormal
+                    textStyle={{ alignSelf: 'center', marginTop: hp(2) }}
+                  >
+                    No Data Found
+                  </TextNormal>
+                )}
+
+                {trainerIsFetching && (
+                  <ActivityIndicator
+                    style={{ paddingTop: 50 }}
+                    size={'large'}
+                    color={COLORS.Green}
+                  />
+                )}
+              </>
+            }
             numColumns={2}
             refreshControl={
               <RefreshControl
@@ -226,5 +247,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: wp(5),
+  },
+  tabActiveStyle: {
+    backgroundColor: COLORS.Green,
+    padding: wp(2),
+    borderRadius: wp(6),
+    fontFamily: Font.bold,
+    color: COLORS.appWhite,
+    paddingHorizontal: wp(3),
+  },
+  tabUnActiveStyle: {
+    padding: wp(2),
+    borderRadius: wp(6),
+    fontFamily: Font.bold,
+    borderWidth: 0.6,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: wp(3),
   },
 });

@@ -1,4 +1,4 @@
-import {TextStyle} from 'react-native';
+import { TextStyle } from 'react-native';
 
 export interface CalenderProps {
   control?: any;
@@ -13,4 +13,5 @@ export interface CalenderProps {
   fiedlName?: string;
   errorMessage: string;
   open?: boolean;
+  minimumDate?: any;
 }

@@ -2,7 +2,13 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, ScrollView, Pressable, FlatList, StyleSheet } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Pressable,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -14,6 +20,8 @@ import {
   TextBiggest,
   TextSmall,
   TextBigger,
+  TextNormal,
+  TextSmaller,
 } from '../../../components/common/customText';
 import CustomWrapper from '../../../components/Wrappers/CustomWrapper';
 import { Font } from '../../../utils/ImagePath';
@@ -26,8 +34,11 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { useHome } from '../Home/useHome';
+import { useHome } from '../../Trainee/Home/useHome';
 import { useGetbyIDQuery } from '../../../redux/Api/plan.api';
+import moment from 'moment';
+import CustomWebViewVideoPlayer from '../../../components/common/customWebViewVideoPlayer';
+import Customimage from '../../../components/common/customImage';
 
 const days = [
   {
@@ -219,7 +230,9 @@ const DietPlan = ({ navigation, route }: any) => {
     React.useCallback(() => {
       plansData.refetch();
     }, [plansData.refetch]),
-  )
+  );
+
+  console.log({ isRole });
 
   const [open, setopen] = useState(false);
   const toggleSection = (index: any) => {
@@ -234,10 +247,17 @@ const DietPlan = ({ navigation, route }: any) => {
       <View key={index} style={styles.section}>
         <Pressable
           onPress={() => toggleSection(index)}
-          style={{ padding: wp(4) }}>
+          style={{ paddingHorizontal: wp(4), paddingVertical: wp(2) }}
+        >
           <View style={styles.header}>
-            <TextBigger style={styles.headerText}>{item?.day}</TextBigger>
-
+            <View>
+              <TextBigger bold color={COLORS.Green}>
+                {moment(item?.day).format('dddd')}
+              </TextBigger>
+              <TextSmaller>
+                {moment(item?.day).format('YYYY MMM DD')}
+              </TextSmaller>
+            </View>
             <CustomIcon
               icon={activeIndex === index ? 'chevron-up' : 'chevron-down'}
               type="feather"
@@ -260,7 +280,8 @@ const DietPlan = ({ navigation, route }: any) => {
                       marginBottom: 0,
                       borderBottomWidth: 0,
                     },
-                  ]}>
+                  ]}
+                >
                   <View>
                     <TextSmall style={styles.subHeadingText}>
                       {mealGroup.subHeading}
@@ -268,18 +289,44 @@ const DietPlan = ({ navigation, route }: any) => {
                   </View>
 
                   {mealGroup.items.map((meal: any, itemIndex: number) => (
-                    <View
-                      key={`${item.id}-${mealIndex}-${itemIndex}`}
-                      style={[
-                        styles.sec,
-                        itemIndex === mealGroup.items.length - 1 &&
-                        styles.lastItem,
-                      ]}>
-                      <TextSmall>{meal.name}</TextSmall>
-                      <TextSmall textStyle={styles.downText}>
-                        {meal.quantity}
-                      </TextSmall>
-                    </View>
+                    <Pressable
+                      key={meal?._id}
+                      onPress={() => {
+                        isRole === 'coach' &&
+                          navigation.navigate(
+                            ScreenNames.CLIENTS_REGISTER2,
+
+                            {
+                              data: {
+                                planId: plansData?.data?.data?._id,
+                                type: 'edit',
+                                mealId: mealGroup?._id,
+                                itemId: meal?._id,
+                                name: meal?.name,
+                                quantity: meal?.quantity,
+                              },
+                            },
+                          );
+                      }}
+                      style={styles.row}
+                    >
+                      <View
+                        key={`${item.id}-${mealIndex}-${itemIndex}`}
+                        style={[
+                          styles.sec,
+                          itemIndex === mealGroup.items.length - 1 &&
+                            styles.lastItem,
+                        ]}
+                      >
+                        <TextSmall>{meal.name}</TextSmall>
+                        <TextSmall textStyle={styles.downText}>
+                          {meal.quantity}
+                        </TextSmall>
+                      </View>
+                      {isRole == 'coach' && (
+                        <CustomIcon type="feather" icon="edit" size={20} />
+                      )}
+                    </Pressable>
                   ))}
                 </View>
               ))}
@@ -295,12 +342,47 @@ const DietPlan = ({ navigation, route }: any) => {
                       marginBottom: 0,
                       borderBottomWidth: 0,
                     },
-                  ]}>
+                  ]}
+                >
                   <View style={styles.sec}>
-                    <TextSmall>{exerItem.name}</TextSmall>
+                    <View style={styles.row}>
+                      <TextSmall>{exerItem.name}</TextSmall>
+                      {isRole == 'coach' && (
+                        <CustomIcon
+                          onPress={() => {
+                            console.log(exerItem?.secs);
+                            navigation.navigate(
+                              ScreenNames.CLIENTS_REGISTER3,
+
+                              {
+                                data: {
+                                  planId: plansData?.data?.data?._id,
+                                  type: 'edit',
+                                  name: exerItem.name,
+                                  sets: exerItem?.description.split('  ')[0],
+                                  repetition:
+                                    exerItem?.description.split('  ')[2],
+                                  secs: exerItem?.secs,
+                                  exercise: exerItem?._id,
+                                  itemId: exerItem?._id,
+                                  video: exerItem?.video,
+                                },
+                              },
+                            );
+                          }}
+                          type="feather"
+                          icon="edit"
+                          size={20}
+                        />
+                      )}
+                    </View>
                     <TextSmall textStyle={styles.downText}>
                       {exerItem?.description}
                     </TextSmall>
+
+                    {isRole == 'coach' && (
+                      <CustomWebViewVideoPlayer uri={exerItem?.video} />
+                    )}
                   </View>
                 </View>
               ))}
@@ -352,39 +434,45 @@ const DietPlan = ({ navigation, route }: any) => {
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1 }}>
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <View style={{ marginBottom: Tab_Height }}>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-            }}>
+            }}
+          >
             <TextBiggest
               textStyle={{
                 fontFamily: Font.bold,
                 marginVertical: hp(1),
                 flex: 1,
-              }}>
+              }}
+            >
               Plan
             </TextBiggest>
 
             <Pressable
               onPress={() => {
                 setopen(true);
-              }}>
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   flex: 1,
-                }}>
+                }}
+              >
                 <TextSmall
                   textStyle={{
                     color: COLORS.textGreen,
                     fontFamily: Font.semiBold,
                     marginRight: wp(2),
-                  }}>
+                  }}
+                >
                   View calendar
                 </TextSmall>
 
@@ -426,7 +514,8 @@ const DietPlan = ({ navigation, route }: any) => {
               flex: 1,
               justifyContent: 'flex-end',
               marginVertical: hp(2),
-            }}>
+            }}
+          >
             <CustomButton
               onPress={() => {
                 navigation.navigate(ScreenNames.CLIENTS_REGISTER1);
@@ -510,5 +599,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: wp(5),
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

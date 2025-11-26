@@ -23,6 +23,8 @@ import { COLORS } from '../../../utils/theme';
 const ActiveTracker = () => {
   const route = useRoute<RouteProp<any, 'ActiveTracker'>>();
   const { trainee_id } = route?.params || {};
+
+  console.log(trainee_id);
   const {
     data: i,
     handleApprovedTracker,

@@ -20,6 +20,7 @@ export const TextNormal: React.FC<customtextProp> = ({
   children,
   textStyle,
   bold,
+  color,
   ...rest
 }) => {
   return (
@@ -29,6 +30,7 @@ export const TextNormal: React.FC<customtextProp> = ({
         styles.normal,
         textStyle,
         bold && { fontFamily: Font.bold },
+        color && { color: color },
       ]}
       {...rest}
     >
@@ -98,6 +100,7 @@ export const TextBig: React.FC<customtextProp> = ({
 export const TextBigger: React.FC<customtextProp> = ({
   children,
   textStyle,
+  color,
   bold,
   ...rest
 }) => {
@@ -108,6 +111,7 @@ export const TextBigger: React.FC<customtextProp> = ({
         styles.bigger,
         textStyle,
         bold && { fontFamily: Font.bold },
+        color && { color: color },
       ]}
       {...rest}
     >

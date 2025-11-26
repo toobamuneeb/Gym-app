@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
   useLazyGetTrackerQuery,
-  useLazyGetTrackersTrainersQuery,
   useSubmitTrackerMutation,
 } from '../../../../redux/Api/trackers.api';
 import { useSelector } from 'react-redux';
@@ -22,15 +21,13 @@ const useTrackersList = (trainer_id: any) => {
   }, []);
 
   const handleGetTrackers = async (tracker_date: string) => {
-    console.log({ tracker_date });
     try {
       const response = await getTrackers({
         trainer_id,
         trainee_id: userData?._id,
-        tracker_date: encodeURIComponent(tracker_date),
+        tracker_date: decodeURIComponent(tracker_date),
         is_submitted: false,
       }).unwrap();
-      console.log(response);
       setData(response.data[0]);
     } catch (error) {
       console.log('❌ Error:', error);

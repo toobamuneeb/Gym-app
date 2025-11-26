@@ -16,6 +16,7 @@ interface HomeHookOptions {
 
 export const useHome = (options: HomeHookOptions = {}) => {
   const { traineeID, checkTraineeID, type } = options;
+  const [prevType, setPrevType] = useState<string | undefined>(undefined);
 
   const [initialLoading, setInitialLoading] = useState(true);
   const [searchTrainer, setsearchTrainer] = useState('');
@@ -62,7 +63,7 @@ export const useHome = (options: HomeHookOptions = {}) => {
 
   useEffect(() => {
     refetchTrainers(type);
-  }, []);
+  }, [type]);
   useEffect(() => {
     refetchTrainers(type);
   }, [debouncedValue]);
@@ -73,21 +74,27 @@ export const useHome = (options: HomeHookOptions = {}) => {
     search: string,
     type: string | undefined,
   ) => {
+    const isTypeChanged = type !== prevType;
     if (
       isLoading.isRefresh ||
       isLoading.isLoadMore ||
       (!isRefresh && !hasMorePages)
-    )
+    ) {
       return;
+    }
+    if (isTypeChanged) {
+      setTrainerData([]);
+      isRefresh = true;
+      pageNumber = 1;
+    }
 
     setIsLoading({
-      isRefresh: isRefresh,
+      isRefresh,
       isLoadMore: !isRefresh,
     });
 
     try {
       const res = await fetchTrainers({ page: pageNumber, search, type });
-      console.log({ res });
       if (!res?.data) {
         setError(true);
         setIsLoading({ isLoadMore: false, isRefresh: false });
@@ -105,11 +112,14 @@ export const useHome = (options: HomeHookOptions = {}) => {
         setTrainerData(prev => [...prev, ...(res.data.data || [])]);
         setPage(pageNumber);
       }
+
+      // Save latest type
+      setPrevType(type);
     } catch (error) {
       setError(true);
     } finally {
       setIsLoading({ isLoadMore: false, isRefresh: false });
-      setInitialLoading(false); // Add this
+      setInitialLoading(false);
     }
   };
 
@@ -124,7 +134,6 @@ export const useHome = (options: HomeHookOptions = {}) => {
     }
   };
 
-  // Memoized plan data
   const plansData = React.useMemo(() => {
     return !checkTraineeID
       ? {
@@ -143,7 +152,7 @@ export const useHome = (options: HomeHookOptions = {}) => {
           error: singlePlanQuery.error,
           refetch: singlePlanQuery.refetch,
         };
-  }, [allPlansQuery, singlePlanQuery]);
+  }, [allPlansQuery, singlePlanQuery, type]);
 
   const todaysPlan = React.useMemo(
     () => ({

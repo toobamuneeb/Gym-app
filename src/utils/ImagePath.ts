@@ -18,7 +18,7 @@ export const ImagPath = {
   trainer1: require('../assets/Home/trainer1.jpg'),
   aboutTrainer: require('../assets/About/aboutTrainer.png'),
   poster: require('../assets/About/poster.png'),
-  
+  ExercisePlan: require('../assets/BottomTabIcons/ExercisePlan.png'),
 };
 
 export const Font = {

@@ -205,15 +205,17 @@ const ClientDetail = ({ navigation, route }: any) => {
                     //       data: {
                     //         planID: plansData.data?.data?._id,
                     //         traineeID: plansData?.data?.data?.userID,
+                    //         plan: plansData.data,
                     //       },
                     //     })
                     //   :
                     refRBSheet?.current?.open();
                   }}
                   text={
-                    plansData.data?.data?.days?.length
-                      ? 'Edit Plan'
-                      : 'Create Plan'
+                    // plansData.data?.data?.days?.length
+                    //   ? 'Edit Plan'
+                    //   :
+                    'Create Plan'
                   }
                   containerStyle={{ flex: 1 }}
                 />

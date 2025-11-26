@@ -7,7 +7,7 @@ export { default as Register } from './Trainee/Register';
 export { default as DateOfBirth } from './Trainee/DateOfBirth';
 export { default as Weight } from './Trainee/Weight';
 export { default as Home } from './Trainee/Home';
-export { default as DietPlan } from './Trainee/DietPlan';
+export { default as DietPlan } from './Common/DietPlan';
 export { default as Chat } from './Trainee/Chat';
 export { default as Profile } from './Trainee/Profile';
 export { default as About } from './Trainee/About';
@@ -22,6 +22,8 @@ export { default as Rating } from './Trainee/Rating';
 export { default as EditProfile } from './Trainee/EditProfile';
 export { default as TrackersList } from './Trainee/TrackersList';
 export { default as Trackers } from './Trainee/Trackers';
+export { default as ExercisePlan } from './Trainee/ExercisePlan';
+export { default as ExerciseList } from './Trainee/ExerciseList';
 
 // Trainer Screens //
 export { default as TrainerHome } from './Trainer/Home';

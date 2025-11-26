@@ -45,9 +45,9 @@ const HorizontalDatePicker = ({
   useEffect(() => {
     if (startingDate) {
       onDateChange?.(selectedDate);
-      ``;
     }
   }, [startingDate]);
+
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
 
@@ -87,26 +87,53 @@ const HorizontalDatePicker = ({
       });
     }
   }, [month, year]);
+  useEffect(() => {
+    if (!flatListRef.current) return;
 
-  const goToNextMonth = () => {
-    setMonth(prev => {
-      const m = prev + 1;
-      if (m > 11) {
-        setYear(y => y + 1);
-        return 0;
+    const index = datesInMonth.findIndex(
+      d => d.toDateString() === selectedDate.toDateString(),
+    );
+
+    if (index >= 0) {
+      flatListRef.current.scrollToIndex({
+        index,
+        animated: true,
+      });
+    }
+  }, [selectedDate, month, year]);
+  const ITEM_WIDTH = wp(9);
+
+  const goNextWeek = () => {
+    setSelectedDate(prev => {
+      const next = new Date(prev);
+      next.setDate(next.getDate() + 7);
+
+      if (endingDate && next > endingDate) {
+        return prev;
       }
-      return m;
+
+      setMonth(next.getMonth());
+      setYear(next.getFullYear());
+      onDateChange?.(next);
+
+      return next;
     });
   };
 
-  const goToPrevMonth = () => {
-    setMonth(prev => {
-      const m = prev - 1;
-      if (m < 0) {
-        setYear(y => y - 1);
-        return 11;
+  const goPrevWeek = () => {
+    setSelectedDate(prev => {
+      const next = new Date(prev);
+      next.setDate(next.getDate() - 7);
+
+      if (startingDate && next < startingDate) {
+        return prev;
       }
-      return m;
+
+      setMonth(next.getMonth());
+      setYear(next.getFullYear());
+      onDateChange?.(next);
+
+      return next;
     });
   };
 
@@ -167,7 +194,7 @@ const HorizontalDatePicker = ({
 
       {!compactMode && (
         <View style={styles.monthRow}>
-          <TouchableOpacity onPress={goToPrevMonth}>
+          <TouchableOpacity onPress={goPrevWeek}>
             <TextNormal style={styles.monthNav}>{'<'}</TextNormal>
           </TouchableOpacity>
 
@@ -175,7 +202,7 @@ const HorizontalDatePicker = ({
             {selectedDate.toLocaleString('en-US', { month: 'long' })} {year}
           </TextNormal>
 
-          <TouchableOpacity onPress={goToNextMonth}>
+          <TouchableOpacity onPress={goNextWeek}>
             <TextNormal style={styles.monthNav}>{'>'}</TextNormal>
           </TouchableOpacity>
         </View>
@@ -209,10 +236,10 @@ const HorizontalDatePicker = ({
           renderItem={renderItem}
           keyExtractor={(_, i) => i.toString()}
           showsHorizontalScrollIndicator={false}
-          getItemLayout={(_, i) => ({
-            length: wp(10),
-            offset: wp(12) * i,
-            index: i,
+          getItemLayout={(data, index) => ({
+            length: ITEM_WIDTH,
+            offset: ITEM_WIDTH * index,
+            index,
           })}
         />
       )}
@@ -239,6 +266,7 @@ const styles = StyleSheet.create({
   monthNav: {
     fontSize: wp(6),
     color: COLORS.textBlack,
+    padding: 10,
   },
   dateItem: {
     width: wp(10),

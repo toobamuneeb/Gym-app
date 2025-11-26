@@ -30,17 +30,31 @@ import { RootState } from '../../../redux/store';
 import { TextBig, TextNormal } from '../../../components/common/customText';
 import useImagePicker from '../../../hooks/useImagePicker';
 import CustomWebViewVideoPlayer from '../../../components/common/customWebViewVideoPlayer';
+import { useUpdateExerciseItemMutation } from '../../../redux/Api/plan.api';
+import { apiRequestHandler } from '../../../utils';
+import useToast from '../../../hooks/Toast';
 
 const ClientRegister3 = ({ navigation, route }: any) => {
   const planData = useSelector((state: RootState) => state.planSlice);
-  const { control, handleSubmit } = useForm();
+
   const { data } = route.params || {};
+  let defaultValues = {
+    exercise: data?.name,
+    sets: data?.sets,
+    reps: data?.repetition,
+    planId: data?.planId,
+    itemId: data?.itemId,
+    secs: data?.secs,
+  };
+  const { control, handleSubmit } = useForm(
+    data?.itemId && { defaultValues: defaultValues },
+  );
   const { openGallery, openCamera, selectedMedia, val } = useImagePicker();
 
-  console.log('ClientRegister3', { data });
-
-  console.log({ val });
+  console.log({ val, data });
   const dispatch = useDispatch();
+  const [update, { isLoading }] = useUpdateExerciseItemMutation();
+  const { showToast } = useToast();
   const addExercises = async () => {
     const submit = handleSubmit(dataa => {
       // let payload = {
@@ -63,7 +77,8 @@ const ClientRegister3 = ({ navigation, route }: any) => {
         day: data?.day,
         item: {
           name: dataa.exercise,
-          description: `${dataa.sets} ` + `${dataa.reps}`,
+          description: `${dataa.sets}  x  ${dataa.reps}`,
+          secs: dataa?.secs,
           video: {
             uri: val?.path,
             type: val?.mime,
@@ -100,7 +115,33 @@ const ClientRegister3 = ({ navigation, route }: any) => {
 
     return submit();
   };
-
+  const formData = new FormData();
+  const updateExercises = handleSubmit(async formdata => {
+    let payload = {
+      planId: formdata.planId,
+      itemId: formdata?.itemId,
+      name: formdata?.exercise,
+      description: `${formdata?.sets} x ${formdata?.reps} `,
+      secs: formdata?.secs,
+    };
+    formData.append('planId', formdata.planId);
+    formData.append('itemId', formdata?.itemId);
+    formData.append('name', formdata?.exercise);
+    formData.append('description', `${formdata?.sets} x ${formdata?.reps} `);
+    formData.append('secs', `${formdata?.secs} `);
+    formData.append('video', {
+      uri: val?.path,
+      type: val?.mime,
+      name: 'trainingVideo' + val?.name,
+    });
+    const updateResponse = await update(val?.path ? formData : payload);
+    const response = apiRequestHandler(updateResponse);
+    if (response?.isSuccess) {
+      showToast('success', response?.data?.message);
+      navigation.goBack();
+    }
+  });
+  let isVideo = val?.path || data?.video;
   return (
     <CustomWrapper edge={['top']}>
       <Header
@@ -137,7 +178,15 @@ const ClientRegister3 = ({ navigation, route }: any) => {
             }}
             inputContainer={{ borderRadius: wp(4) }}
           />
-
+          <CustomRHFTextInput
+            control={control}
+            name="secs"
+            title="Time Interval"
+            rules={{
+              required: { value: true, message: 'Time interval is required ' },
+            }}
+            inputContainer={{ borderRadius: wp(4) }}
+          />
           <Pressable
             onPress={() => {
               Alert.alert(
@@ -167,26 +216,7 @@ const ClientRegister3 = ({ navigation, route }: any) => {
             <TextNormal bold children={'Upload Video'} />
           </Pressable>
 
-          {val?.path && (
-            // <Pressable
-            //   style={
-            //     {
-            //       // height: 100,
-            //       // width: 200,
-            //       // backgroundColor: 'gray',
-            //       // marginTop: 10,
-            //       // justifyContent: 'center',
-            //       // alignItems: 'center',
-            //     }
-            //   }
-            // >
-
-            // <Modal>
-            <CustomWebViewVideoPlayer uri={val?.path} />
-            // </Modal>
-
-            // </Pressable>
-          )}
+          {isVideo && <CustomWebViewVideoPlayer uri={isVideo} />}
         </View>
         <View
           style={{
@@ -196,10 +226,11 @@ const ClientRegister3 = ({ navigation, route }: any) => {
           }}
         >
           <CustomButton
+            isLoading={isLoading}
             onPress={() => {
-              addExercises();
+              data?.type == 'edit' ? updateExercises() : addExercises();
             }}
-            text="Add Exercise"
+            text={data?.type == 'edit' ? 'Update Exercise' : 'Add Exercise'}
           />
         </View>
       </ScrollView>

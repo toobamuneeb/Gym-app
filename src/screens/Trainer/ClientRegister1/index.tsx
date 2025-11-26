@@ -72,7 +72,8 @@ const ClientRegister1 = ({ navigation, route }: any) => {
   );
 
   const { data } = route.params || {};
-  console.log({ data });
+  let plansData = data?.plan?.data;
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const selectedDateKey = selectedDate
     ? selectedDate.toISOString().split('T')[0]
@@ -84,17 +85,20 @@ const ClientRegister1 = ({ navigation, route }: any) => {
     .utcOffset(moment().utcOffset(), true)
     .format('YYYY-MM-DDTHH:mm:ssZ');
 
-  let StartingDate = moment(data?.startingDate)
+  let StartingDate = moment(
+    plansData?.startDate ? plansData?.startDate : data?.startingDate,
+  )
     .utcOffset(moment().utcOffset(), true)
     .format('YYYY-MM-DDTHH:mm:ssZ');
 
-  let EndingDate = moment(data?.endingDate)
+  let EndingDate = moment(
+    plansData?.endDate ? plansData?.endDate : data?.endingDate,
+  )
     .utcOffset(moment().utcOffset(), true)
     .format('YYYY-MM-DDTHH:mm:ssZ');
-
+  console.log({ EndingDate, selectedDate });
   const filterPlan = planData.find(i => i.day === currentDate);
-  console.log({ filterPlan, planData });
-  console.log(currentDate);
+
   return (
     <CustomWrapper edge={['top']}>
       <Header
@@ -106,8 +110,16 @@ const ClientRegister1 = ({ navigation, route }: any) => {
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         <HorizontalDatePicker
           compactMode
-          startingDate={data?.startingDate?.toString()}
-          endingDate={data?.endingDate?.toString()}
+          startingDate={
+            plansData?.startDate
+              ? new Date(plansData?.startDate).toString()
+              : data?.startingDate?.toString()
+          }
+          endingDate={
+            plansData?.endDate
+              ? new Date(plansData?.endDate).toString()
+              : data?.endingDate?.toString()
+          }
           onDateChange={(date: any) => {
             console.log('HorizontalDatePicker', new Date(date).toString());
             setSelectedDate(date);
@@ -224,6 +236,7 @@ const ClientRegister1 = ({ navigation, route }: any) => {
         >
           <CustomButton
             onPress={() => {
+              console.log({ planData });
               data?.planID
                 ? editPlan(navigation, route, planData)
                 : handlePlan(navigation, route, planData);

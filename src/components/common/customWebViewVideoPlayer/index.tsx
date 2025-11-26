@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 
-export default function FullscreenVideoWebView({ uri }) {
+export default function CustomWebViewVideoPlayer({ uri }: any) {
   const webViewRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [shouldPauseAfterExit, setShouldPauseAfterExit] = useState(false);
@@ -34,7 +34,7 @@ export default function FullscreenVideoWebView({ uri }) {
           webkit-playsinline
           webkitAllowFullscreen
           allowfullscreen
-          style="width:100%;height:100%;"
+          style="width:100%;height:100%;border-radius:20px; overflow:hidden; "
         >
           <source src="${uri}" type="video/mp4" />
         </video>
@@ -50,7 +50,15 @@ export default function FullscreenVideoWebView({ uri }) {
   };
 
   return (
-    <View style={{ height: 200, width: '100%' }}>
+    <View
+      style={{
+        height: 140,
+        width: '100%',
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: 'red',
+      }}
+    >
       <WebView
         ref={webViewRef}
         source={{ html }}

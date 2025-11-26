@@ -18,16 +18,33 @@ import {
 } from '../../../redux/reducers/planSlice';
 import { RootState } from '../../../redux/store';
 import moment from 'moment';
+import { useUpdateMealItemMutation } from '../../../redux/Api/plan.api';
+import { apiRequestHandler } from '../../../utils';
+import useToast from '../../../hooks/Toast';
 
 const ClientRegister2 = ({ navigation, route }: any) => {
   const planData = useSelector((state: RootState) => state.planSlice);
-
+  const [updateMeal, { isLoading }] = useUpdateMealItemMutation();
   const dispatch = useDispatch();
   const { data } = route.params;
-  console.log('ClientRegister2', data?.day);
-  const [days, setdays] = useState<any>([]);
+  const { showToast } = useToast();
 
-  const { control, handleSubmit } = useForm();
+  console.log({ data });
+
+  let defaultValues = {
+    type: data?.type,
+    foodname: data?.name,
+    servingsize: data?.quantity,
+    itemId: data?.itemId,
+    mealId: data?.mealId,
+    planId: data?.planId,
+  };
+
+  const { control, handleSubmit } = useForm(
+    data?.mealId && {
+      defaultValues: defaultValues,
+    },
+  );
   // const addFood = async () => {
   //   const dayName = new Date(data?.day).toLocaleString('en-US', {
   //     weekday: 'long',
@@ -76,6 +93,22 @@ const ClientRegister2 = ({ navigation, route }: any) => {
     navigation.goBack();
   });
 
+  const updateFood = handleSubmit(async formData => {
+    let payload = {
+      name: formData?.foodname,
+      quantity: formData?.servingsize,
+      itemId: formData?.itemId,
+      mealId: formData?.mealId,
+      planId: formData?.planId,
+    };
+    const apiResponse = await updateMeal(payload);
+    const response = apiRequestHandler(apiResponse);
+    if (response?.isSuccess) {
+      showToast('success', response?.data?.message);
+      navigation.goBack();
+    }
+  });
+
   return (
     <CustomWrapper edge={['top']}>
       <Header
@@ -112,10 +145,11 @@ const ClientRegister2 = ({ navigation, route }: any) => {
           }}
         >
           <CustomButton
+            isLoading={isLoading}
             onPress={() => {
-              addFood();
+              data?.type == 'edit' ? updateFood() : addFood();
             }}
-            text="Add Food"
+            text={data?.type == 'edit' ? 'Update Food' : 'Add Food'}
           />
         </View>
       </ScrollView>

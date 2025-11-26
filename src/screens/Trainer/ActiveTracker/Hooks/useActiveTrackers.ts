@@ -7,12 +7,11 @@ import {
 } from '../../../../redux/Api/trackers.api';
 import { apiRequestHandler } from '../../../../utils';
 
-const useActiveTrackers = (trainee_ids: string) => {
-  let trainee_id = '68f64e345c0eee6acabeda38';
+const useActiveTrackers = (trainee_id: string) => {
   const [getTrackers, { reset, isLoading, isFetching }] =
     useLazyGetTrackerQuery();
-  const [trigger, { isLoading: loading }] = useApprovedTrackerMutation();
-
+  const [trigger] = useApprovedTrackerMutation();
+  const [loading, setLoading] = useState(false);
   const userData = useSelector((state: RootState) => state?.generalSlice?.data);
   const [data, setData] = useState<any>();
 
@@ -24,32 +23,35 @@ const useActiveTrackers = (trainee_ids: string) => {
     try {
       const response = await getTrackers({
         trainer_id: userData?._id,
-        trainee_id: trainee_id,
+        trainee_id,
         is_submitted: true,
         is_approved: false,
         tracker_date: tracker_date || undefined,
       }).unwrap();
-      console.log(response?.data);
 
       const sections = response?.data?.map?.((item: any) => ({
         title: new Date(item?.tracker_date),
         data: item?.questions,
       }));
-
-      setData(response.data);
+      console.log({ sections });
+      console.log(response?.data);
+      setData(response?.data);
     } catch (error) {
       console.log('❌ Error:', error);
     }
   };
 
   const handleApprovedTracker = async (tracker_id: any) => {
+    setLoading(true);
     const res = await trigger({ tracker_id: tracker_id });
     const response = apiRequestHandler(res);
     if (response?.isSuccess) {
       handleGetTrackers();
+      setLoading(isFetching);
       return true;
     } else {
       handleGetTrackers();
+      setLoading(isFetching);
       return false;
     }
   };

@@ -1,23 +1,23 @@
 import { use, useState } from 'react';
-import {useForm} from 'react-hook-form';
-import {Alert} from 'react-native';
+import { useForm } from 'react-hook-form';
+import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
 type FormData = {
-  media: {path: any; mime?: string; name?: string} | null;
+  media: { path: any; mime?: string; name?: string } | null;
 };
 const useImagePicker = () => {
-  const {setValue, watch, control, handleSubmit} = useForm<FormData>({
+  const { setValue, watch, control, handleSubmit } = useForm<FormData>({
     defaultValues: {
       media: null,
     },
   });
-const [val,setVal]=useState<any>(null);
+  const [val, setVal] = useState<any>(null);
   const selectedMedia = watch('media');
 
   const maxFileSizeInBytes = 500 * 1024 * 1024; // 50MB in bytes
 
-  const openCamera = async ({mediaType}: any) => {
+  const openCamera = async ({ mediaType }: any) => {
     let config = {
       // forceJpg: true,
       cropping: mediaType === 'video' || 'any' ? false : true,
@@ -28,7 +28,7 @@ const [val,setVal]=useState<any>(null);
 
     try {
       const res = await ImagePicker.openCamera(config);
-  
+
       if (res?.size > maxFileSizeInBytes) {
         Alert.alert(
           'File Size Exceeded',
@@ -51,8 +51,7 @@ const [val,setVal]=useState<any>(null);
         name: res?.filename,
       });
 
-setVal({
-    
+      setVal({
         path: res?.path || res.sourceURL,
         mime: res?.mime,
         name: res?.filename,
@@ -76,7 +75,7 @@ setVal({
     };
     try {
       const res = await ImagePicker.openPicker(config);
-   
+
       if (res?.size > maxFileSizeInBytes) {
         Alert.alert(
           'File Size Exceeded',
@@ -91,11 +90,11 @@ setVal({
         return;
       }
       if (res.mime.includes('video')) {
-       setVal({
-        path: res?.path || res.sourceURL,
-        mime: res?.mime,
-        name: res?.filename,
-      });
+        setVal({
+          path: res?.path || res.sourceURL,
+          mime: res?.mime,
+          name: res?.filename,
+        });
       }
       setValue('media', {
         path: res?.path || res.sourceURL,
@@ -115,7 +114,7 @@ setVal({
     openCamera,
     openGallery,
     selectedMedia,
-    val
+    val,
   };
 };
 
