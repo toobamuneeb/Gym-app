@@ -17,7 +17,7 @@ const RenderItem = ({ item }: any) => {
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate(ScreenNames.TODAY_EXERCISE_LIST, { data: item })
+        navigation.navigate(ScreenNames.EXERCISE_LIST, { data: item })
       }
       style={styles.container}
     >
