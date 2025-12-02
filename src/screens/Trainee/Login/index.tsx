@@ -1,5 +1,5 @@
 import React from 'react';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   View,
   StatusBar,
@@ -7,35 +7,32 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  useColorScheme,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from 'react-native';
-import {RFValue} from 'react-native-responsive-fontsize';
+import { RFValue } from 'react-native-responsive-fontsize';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useDispatch, useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import CustomButton from '../../../components/common/customButton';
 import CustomRHFTextInput from '../../../components/common/customRHFinput';
-import {TextHuge, TextNormal} from '../../../components/common/customText';
-import {ImagPath, Font} from '../../../utils/ImagePath';
-import {COLORS} from '../../../utils/theme';
-import {setLogin} from '../../../redux/reducers/generalSlice';
-import {useLoginMutation} from '../../../redux/Api/auth.api';
+import { TextHuge, TextNormal } from '../../../components/common/customText';
+import { ImagPath, Font } from '../../../utils/ImagePath';
+import { COLORS } from '../../../utils/theme';
 import useLogin from './useLogin';
-import {ScreenNames} from '../../../navigations/ScreenName';
-import {RootState} from '../../../redux/store';
+import { RootState } from '../../../redux/store';
 
-const Login = ({navigation}: any) => {
+const Login = ({ navigation }: any) => {
   const fcmToken = useSelector(
     (state: RootState) => state?.generalSlice?.fcmToken,
   );
-  const {control, handleLogin, handleSubmit, isLoading} = useLogin();
+  const { control, handleLogin, handleSubmit, isLoading } = useLogin();
   const onLogin = () => {
-    return handleSubmit(data => handleLogin({...data, fcmToken}, navigation))();
+    return handleSubmit(data =>
+      handleLogin({ ...data, fcmToken }, navigation),
+    )();
   };
 
   const navigateTo = (screen: string) => () => {
@@ -45,7 +42,8 @@ const Login = ({navigation}: any) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.container}>
+      style={styles.container}
+    >
       <StatusBar
         barStyle={'light-content'}
         backgroundColor={'#000'}
@@ -55,7 +53,8 @@ const Login = ({navigation}: any) => {
         bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled">
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.headerContainer}>
           <Image source={ImagPath.loginBack} style={styles.imgBack} />
           <TextHuge textStyle={styles.loginText}>Login</TextHuge>
@@ -69,7 +68,7 @@ const Login = ({navigation}: any) => {
               title="Email"
               placeholder="Enter Email"
               rules={{
-                required: {value: true, message: 'Email is required'},
+                required: { value: true, message: 'Email is required' },
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: 'Invalid email address',
@@ -84,7 +83,7 @@ const Login = ({navigation}: any) => {
               placeholder="Enter Password"
               name="password"
               rules={{
-                required: {value: true, message: 'Password is required'},
+                required: { value: true, message: 'Password is required' },
                 minLength: {
                   value: 8,
                   message: 'Password must be at least 8 characters',
@@ -109,7 +108,8 @@ const Login = ({navigation}: any) => {
               Don't have an account?{' '}
               <TextNormal
                 onPress={navigateTo('register')}
-                textStyle={{fontFamily: Font.semiBold}}>
+                textStyle={{ fontFamily: Font.semiBold }}
+              >
                 SignUp
               </TextNormal>
             </TextNormal>

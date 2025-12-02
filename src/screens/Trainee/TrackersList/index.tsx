@@ -67,6 +67,7 @@ const TrackersList = () => {
     handleGetTrackers,
     isLoading,
     isFetching,
+    loading,
   } = useTrackersList(trainerId);
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
@@ -120,6 +121,7 @@ const TrackersList = () => {
         ListFooterComponent={
           data?.questions?.length && (
             <CustomButton
+              isLoading={loading}
               onPress={handleSubmit(onChange)}
               textStyle={{ color: COLORS.lightGreen }}
               text="Submit Tracker"

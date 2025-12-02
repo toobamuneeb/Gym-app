@@ -18,8 +18,8 @@ const useAddNewTrackers = (reset: any) => {
       const res = apiRequestHandler(response);
       if (res.isSuccess) {
         showToast('success', 'Success', res.data.message);
+        reset();
       }
-      reset();
     } catch (error) {
       console.log('❌ Error:', error);
     }

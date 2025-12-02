@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderWidth: hp(0.15),
     borderColor: COLORS.btnBlack,
     backgroundColor: COLORS.inputBack,
-    paddingHorizontal: wp(6),
+    paddingHorizontal: wp(4.1),
     flex: 1,
     borderRadius: wp(20),
     height: hp(7.5),

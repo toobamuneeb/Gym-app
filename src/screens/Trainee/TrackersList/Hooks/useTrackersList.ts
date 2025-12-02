@@ -11,7 +11,7 @@ const useTrackersList = (trainer_id: any) => {
   const [getTrackers, { reset, isLoading, isFetching }] =
     useLazyGetTrackerQuery();
 
-  const [submit] = useSubmitTrackerMutation();
+  const [submit, { isLoading: loading }] = useSubmitTrackerMutation();
   const userData = useSelector((state: RootState) => state?.generalSlice.data);
   const [data, setData] = useState<any>();
   const [date, setDate] = useState<any>();
@@ -47,8 +47,8 @@ const useTrackersList = (trainer_id: any) => {
     console.log(payload);
     const response = await submit(payload);
     const responseHandler = apiRequestHandler(response);
-
     handleGetTrackers(date ? date : new Date()?.toString());
+    console.log({ responseHandler });
   };
 
   return {
@@ -58,6 +58,7 @@ const useTrackersList = (trainer_id: any) => {
     onChangeDate,
     onChange,
     isFetching,
+    loading,
   };
 };
 

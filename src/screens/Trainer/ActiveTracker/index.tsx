@@ -19,6 +19,8 @@ import useActiveTrackers from './Hooks/useActiveTrackers';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import moment from 'moment';
 import { COLORS } from '../../../utils/theme';
+import { CustomIcon } from '../../../components/common/customIcons';
+import CustomHeader from './Components/CustomHeader';
 
 const ActiveTracker = () => {
   const route = useRoute<RouteProp<any, 'ActiveTracker'>>();
@@ -29,7 +31,6 @@ const ActiveTracker = () => {
     data: i,
     handleApprovedTracker,
     loading,
-    handleGetTrackers,
     onChange,
     isFetching,
   } = useActiveTrackers(trainee_id);
@@ -53,10 +54,7 @@ const ActiveTracker = () => {
 
   return (
     <CustomWrapper edge={['top', 'bottom']}>
-      <View style={styles.headerContain}>
-        <TextBiggest bold children={'Active Trackers'} />
-        <CustomDatePicker onChange={onChange} />
-      </View>
+      <CustomHeader onChange={onChange} />
       <SectionList
         sections={section || []}
         renderItem={renderItem}
@@ -84,13 +82,6 @@ const ActiveTracker = () => {
 export default ActiveTracker;
 
 const styles = StyleSheet.create({
-  headerContain: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: wp(4),
-    alignSelf: 'center',
-    paddingVertical: wp(4),
-  },
   listEmptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',

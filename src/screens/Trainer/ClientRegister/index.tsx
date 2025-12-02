@@ -48,12 +48,12 @@ const ClientRegister = ({ navigation, route }: any) => {
   };
 
   const [minDate, setMinDate] = useState(new Date());
-  console.log(lastDate?.nextDate);
+
   useLayoutEffect(() => {
     if (lastDate?.nextDate) {
       setMinDate(lastDate?.nextDate);
     }
-  }, [lastDate?.nextDate]);
+  }, [lastDate?.nextDate, minDate]);
 
   const handleDateConfirm = (date: Date) => {
     const nextAllowed = new Date(minDate);

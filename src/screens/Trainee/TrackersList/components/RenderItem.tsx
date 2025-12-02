@@ -58,6 +58,7 @@ const RenderItem = ({ item, index, control }: any) => {
           rules={{
             required: { value: true, message: 'Answer is required' },
           }}
+          multiline
           inputContainer={styles.input}
         />
       )}
@@ -86,9 +87,9 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 0,
-    borderRadius: 5,
-    height: wp(22),
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    height: wp(25),
+    borderRadius: wp(4),
   },
   radioButtonError: {
     color: 'red',

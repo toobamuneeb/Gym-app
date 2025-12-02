@@ -33,9 +33,8 @@ const useActiveTrackers = (trainee_id: string) => {
         title: new Date(item?.tracker_date),
         data: item?.questions,
       }));
-      console.log({ sections });
-      console.log(response?.data);
       setData(response?.data);
+      setLoading(false);
     } catch (error) {
       console.log('❌ Error:', error);
     }
@@ -47,7 +46,6 @@ const useActiveTrackers = (trainee_id: string) => {
     const response = apiRequestHandler(res);
     if (response?.isSuccess) {
       handleGetTrackers();
-      setLoading(isFetching);
       return true;
     } else {
       handleGetTrackers();

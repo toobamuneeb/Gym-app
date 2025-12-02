@@ -351,6 +351,8 @@ const DietPlan = ({ navigation, route }: any) => {
                         <CustomIcon
                           onPress={() => {
                             console.log(exerItem?.secs);
+                            const parts =
+                              exerItem?.description?.split(' ') || [];
                             navigation.navigate(
                               ScreenNames.CLIENTS_REGISTER3,
 
@@ -359,9 +361,8 @@ const DietPlan = ({ navigation, route }: any) => {
                                   planId: plansData?.data?.data?._id,
                                   type: 'edit',
                                   name: exerItem.name,
-                                  sets: exerItem?.description.split('  ')[0],
-                                  repetition:
-                                    exerItem?.description.split('  ')[2],
+                                  sets: parts[0],
+                                  repetition: parts[parts.length - 1],
                                   secs: exerItem?.secs,
                                   exercise: exerItem?._id,
                                   itemId: exerItem?._id,

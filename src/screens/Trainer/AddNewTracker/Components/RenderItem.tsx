@@ -48,7 +48,12 @@ const RenderItem = ({ control, index, setValue }: any) => {
         rules={{
           required: { value: true, message: 'question name is required' },
         }}
-        inputContainer={{ borderWidth: 0, borderRadius: 5, height: wp(12) }}
+        inputContainer={{
+          borderWidth: 0,
+          borderRadius: 5,
+          height: wp(12),
+          alignItems: 'center',
+        }}
       />
 
       <Controller

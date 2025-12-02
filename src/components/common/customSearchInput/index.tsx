@@ -5,15 +5,15 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {FC} from 'react';
-import {TextInput} from 'react-native-gesture-handler';
-import {COLORS} from '../../../utils/theme';
+import React, { FC } from 'react';
+import { TextInput } from 'react-native-gesture-handler';
+import { COLORS } from '../../../utils/theme';
 
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import {CustomIcon} from '../customIcons';
+import { CustomIcon } from '../customIcons';
 
 type Props = {
   value?: string;
@@ -59,10 +59,10 @@ export default CustomSearchInput;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.appWhite,
-    marginTop: heightPercentageToDP(1),
+    // marginTop: heightPercentageToDP(1),
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Platform.OS == 'ios' ? heightPercentageToDP(1) : 0,
+    // paddingVertical: Platform.OS == 'ios' ? heightPercentageToDP(1) : 0,
     paddingHorizontal: widthPercentageToDP(3),
     gap: widthPercentageToDP(1),
     borderBottomWidth: 1,

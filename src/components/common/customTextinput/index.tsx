@@ -10,6 +10,7 @@ import {
 } from 'react-native-responsive-screen';
 import { CustomIcon } from '../customIcons';
 import { CustomTextinputProp } from './interface';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const CustomTextinput: React.FC<CustomTextinputProp> = ({
   secureTextEntry,
@@ -49,7 +50,7 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
           styles.inputContainer,
           inputContainer,
           multiline && {
-            borderRadius: wp(8),
+            borderRadius: wp(6),
             height: hp(25),
             flexDirection: undefined,
             paddingVertical: hp(1),
@@ -62,6 +63,7 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
           multiline={multiline}
           numberOfLines={numberOfLines}
           autoCapitalize="none"
+          verticalAlign="top"
           secureTextEntry={secureTextEntry ? hidePassword : false}
           style={[
             styles.inputStyle,
@@ -71,7 +73,7 @@ const CustomTextinput: React.FC<CustomTextinputProp> = ({
               maxHeight: hp(24),
               flex: undefined,
             },
-            // { height: multiline ? undefined : hp(7) },
+            !multiline && { height: hp(7) },
           ]}
           placeholder={placeholder}
           value={value}

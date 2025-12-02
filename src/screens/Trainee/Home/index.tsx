@@ -118,7 +118,7 @@ const Home = React.memo(({ navigation }: any) => {
   };
 
   return (
-    <CustomWrapper edge={['top']} containerStyle={{ paddingTop: hp(1.5) }}>
+    <CustomWrapper edge={['top']} containerStyle={{}}>
       <HorizontalDatePicker
         onPressNotification={() => {
           navigation.navigate('notification');
